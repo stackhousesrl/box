@@ -1,0 +1,36 @@
+{
+  "name": "@stackhouseos/box-core",
+  "version": "4.3.12",
+  "description": "Json generator layout",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stackhousesrl/box/tree/master/packages/box-core"
+  },
+  "main": "./lib",
+  "browser": "./lib",
+  "types": "index.d.ts",
+  "scripts": {
+    "prepublish": "yarn task-babel",
+    "task-babel-watch": "yarn task-babel -w",
+    "task-babel": "babel -d lib src --copy-files",
+    "test": "mocha -w --require @babel/register ./tests"
+  },
+  "author": "Stackhouse SRL",
+  "license": "ISC",
+  "dependencies": {
+    "@stackhouseos/json-rules": "^1.2.2",
+    "classnames": "^2.2.6",
+    "hoist-non-react-statics": "^3.3.1",
+    "immer": "^8.0.0",
+    "is-buffer": "^2.0.4",
+    "lodash": "^4.17.15",
+    "moize": "^5.4.7",
+    "reselect": "^4.0.0"
+  },
+  "peerDependencies": {
+    "prop-types": ">=15",
+    "react": ">=16",
+    "react-redux": ">=7",
+    "redux": ">=4"
+  }
+}
