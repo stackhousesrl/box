@@ -19,7 +19,6 @@
   "license": "ISC",
   "dependencies": {
     "@stackhouseos/json-rules": "^1.2.2",
-    "classnames": "^2.2.6",
     "hoist-non-react-statics": "^3.3.1",
     "immer": "^8.0.0",
     "is-buffer": "^2.0.4",
