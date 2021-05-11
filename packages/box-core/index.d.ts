@@ -5,10 +5,10 @@ declare module '@stackhouseos/box-core' {
         rules?: {} | [];
         validate?: {};
         id?: string;
+        container?: BoxProps | string;
         prefix?: string;
         ruleModeDisable?: boolean;
         fields: BoxProps | BoxProps[];
-        container: BoxProps | string;
     }
 
     export default class Box extends Component<BoxProps> {
