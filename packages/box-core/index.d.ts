@@ -15,5 +15,5 @@ declare module '@stackhouseos/box-core' {
         static extendControls ( controls: {}): Component
     }
 
-    export const createBoxInstance: () => Box;
+    export const createBoxInstance: () => typeof Box;
 }
