@@ -184,10 +184,10 @@ var BoxField = /*#__PURE__*/function (_PureComponent) {
           valueId: valueId,
           selectorId: selectorId
         });
-        if (typeof action === 'string') dispatch({
+        if (typeof action === 'string') return dispatch({
           type: action,
           payload: baseData
-        });else action({
+        });else return action({
           dispatch: dispatch,
           payload: baseData
         });
