@@ -118,8 +118,8 @@ class BoxField extends PureComponent {
         return dispatch(actionResetData(reducer, selector.join('.')));
       }
       const baseData = Object.assign({}, contextProps, { params: paramsField || paramsFromArgs, value, id, field, fieldId, valueId, selectorId });
-      if (typeof action === 'string') dispatch({ type: action, payload: baseData });
-      else action({ dispatch, payload: baseData });
+      if (typeof action === 'string') return dispatch({ type: action, payload: baseData });
+      else return action({ dispatch, payload: baseData });
     }
   }
 
