@@ -16,7 +16,7 @@ const select = (state, extraData, name) => {
   const cleanedPath = cleanPath(name)
   const [reducer, ...rest] = cleanedPath.split('.');
   return isImmutable(state)
-    ? _get(state.get(reducer), rest) ?? _get(extraData.get(reducer), rest)
+    ? _get(state.get(reducer), rest) ?? _get(extraData, rest)
     : _get(state, cleanedPath) ?? _get(extraData, cleanedPath);
 };
 
