@@ -1,23 +1,21 @@
-import React, { useContext, useMemo } from "react"
+import React, { memo, useContext, useMemo, useRef } from "react"
 import { connect } from "react-redux"
 import { BoxContext } from "./context"
 
-export default makeMapStateToProps => WrappedComponent => props => {
+export default makeMapStateToProps => WrappedComponent => memo(wrapperProps => {
   const context = useContext(BoxContext)
 
-  const ConnectedComponent = useMemo(() => context.state
+  // use custom dispatch
+  const ConnectedComponent = useMemo(() => context.dispatch
     ? WrappedComponent
-    : connect(
-      makeMapStateToProps,
-      null, null,
-      { forwardRef: true },
-    )(WrappedComponent),
-    [])
+    : connect(makeMapStateToProps, null, null, { forwardRef: true },)(WrappedComponent),
+    [context.dispatch]
+  )
 
-  if (context.state) {
-    const newProps = useMemo(() => makeMapStateToProps(context.state, props), [context.state, props])
-    return <ConnectedComponent {...props} {...newProps} dispatch={context.dispatch} />
+  if (context.dispatch) {
+    const newProps = useMemo(() => makeMapStateToProps(context, wrapperProps), [context, wrapperProps])
+    return <ConnectedComponent {...wrapperProps} {...newProps} dispatch={context.dispatch} />
   }
 
-  return <ConnectedComponent {...props} />
-}
+  return <ConnectedComponent {...wrapperProps} />
+})

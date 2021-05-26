@@ -3,6 +3,8 @@ import './App.css';
 import Box, { BoxContextProvider } from '@stackhouseos/box-core'
 import { createSelector } from 'reselect';
 import set from 'lodash/set'
+import produce from 'immer';
+import useWhyDidYouUpdate from './useWhyDidYouUpdate'
 
 const selector = createSelector(
   state => state.global,
@@ -127,9 +129,9 @@ const model = [
   {
     type: 'text',
     text: 'OK',
-    color: 'red',
+    color: 'green',
     rules: {
-      '^hasError': { eq: false }
+      '^isValid': { eq: true }
     }
   }
 ]
@@ -172,14 +174,17 @@ const modelNews = [
 ]
 
 function reducer(state, action) {
-  console.log("TCL: reducer -> state, action", state, action)
-  return set({ ...state }, action.payload.id, action.payload.value);
+  return produce(state, draft => {
+    return set(draft, action.payload.id, action.payload.value);
+  })
 }
 
 function App() {
   const [showErrors, setShowErrors] = useState()
   const [state, dispatch] = useReducer(reducer, {})
-  const [state2, dispatch2] = useReducer(reducer, {})
+  //const [state2, dispatch2] = useReducer(reducer, {})
+
+  // useWhyDidYouUpdate('state', { state })
 
   return (
     <div className="App">
@@ -187,21 +192,21 @@ function App() {
       <BoxContextProvider
         value={{
           dispatch,
-          state: { global: state },
           showErrors,
+          global: state,
           app: { name: 'ZUCCA' }
         }}>
         <Box prefix="global" fields={model} />
       </BoxContextProvider>
 
-      <BoxContextProvider
+      {/*       <BoxContextProvider
         value={{
           dispatch: dispatch2,
-          state: state2,
+          ...state2,
           showErrors
         }}>
         <Box fields={modelNews} />
-      </BoxContextProvider>
+      </BoxContextProvider> */}
 
       <button onClick={() => setShowErrors(true)}>SHOW ERRORS</button>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl'
@@ -13,13 +13,13 @@ import configureStore from './store';
 const { store } = configureStore({});
 
 Box.extendControls({
-  input: ({ onChange, value = '', error, onBlur }) => {
+  input: memo(({ onChange, value = '', error, onBlur }) => {
     return (
       <div style={{ border: '1px solid', borderColor: error ? 'red' : 'gray', padding: 5 }}>
         <input style={{ borderColor: error ? 'red' : 'gray' }} onBlur={onBlur} onChange={e => onChange(e.target.value)} value={value} />
       </div>
     )
-  },
+  }),
   inputState: ({ changeState, onChange, value = '', error, onBlur }) => {
     return (
       <div style={{ border: '1px solid', borderColor: error ? 'red' : 'gray', padding: 5 }}>
@@ -28,27 +28,28 @@ Box.extendControls({
       </div>
     )
   },
-  text: ({ value, text, fromStore, color, error }) => <p
+  text: memo(({ value, text, fromStore, color, error }) => <p
     style={{ background: color, border: '1px solid', borderColor: error ? 'red' : 'gray', padding: 5 }}>
     t: {text} v:{value} s:{fromStore}
-  </p>,
-  main: ({ nome, cognome, value, fromStore }) => {
+  </p>),
+  main: memo(({ nome, cognome, value, fromStore }) => {
     return <div style={{ background: 'gray' }}>
       {`${value}, ${nome}, ${cognome}, ${fromStore}`}
     </div>
-  },
+  }),
   paper: ({ children }) => {
     return <div>{children}</div>
   },
-  button: ({ title, disabled }) => {
+  button: memo(({ title, disabled }) => {
     return <button disabled={disabled}>{title}</button>
-  }
+  })
 })
 
 ReactDOM.render(
   <Provider store={store}>
     <IntlProvider>
       <App />
+      <span>no rerender</span>
     </IntlProvider>
   </Provider>
   ,

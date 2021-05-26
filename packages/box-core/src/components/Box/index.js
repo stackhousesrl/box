@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { PureComponent, useContext, useMemo } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moize from 'moize'
 import { sortWithOrder, getPath, containerFields, cleanPath } from '../../utils';
@@ -7,7 +7,6 @@ import EmptyContainer from '../empty';
 import { actionUpdate } from '../../actions';
 import { withBoxContext } from '../../context';
 import WrapperField from './wrapper-field';
-import { isEmpty } from '@stackhouseos/json-rules/lib/utils';
 
 const Controls = {};
 
@@ -170,7 +169,7 @@ export const createBoxInstance = () => withBoxContext(class Box extends PureComp
         reducer={reducer}
         selector={finalSelector.join('.')}
         Control={Control}
-        fieldType={typeof type === 'string' ? type : 'Class'}
+        fieldType={typeof type === 'string' ? type : typeof type}
         onChange={this.onChange}
       >
         {fields && this.renderFields(fields, sort, fieldId)}

@@ -21,7 +21,6 @@ const select = (state, extraData, name) => {
 };
 
 const transformPrefix = (key, prefix) => {
-
   if (_startsWith(key, '^', 0)) {
     return key
   }

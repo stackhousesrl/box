@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import _get from 'lodash/get';
 import _size from 'lodash/size';
