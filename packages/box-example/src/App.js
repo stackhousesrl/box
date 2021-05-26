@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import './App.css';
 import Box, { BoxContextProvider } from '@stackhouseos/box-core'
 import { createSelector } from 'reselect';
+import set from 'lodash/set'
 
 const selector = createSelector(
   state => state.global,
@@ -144,21 +145,6 @@ const modelNews = [
   },
   {
     type: 'input',
-    id: 'nome',
-    required: true
-  },
-  {
-    type: 'input',
-    id: 'nome',
-    required: true
-  },
-  {
-    type: 'input',
-    id: 'nome',
-    required: true
-  },
-  {
-    type: 'input',
     id: 'cognome'
   },
   {
@@ -180,24 +166,41 @@ const modelNews = [
     ruleModeDisable: true,
     rules: [{
       '^hasError': { eq: false }
-    }, {
-      '^global.enabled': { eq: true }
     }]
   }
 ]
 
+function reducer(state, action) {
+  return set({ ...state }, action.payload.id, action.payload.value);
+}
+
 function App() {
   const [showErrors, setShowErrors] = useState()
+  const [state, dispatch] = useReducer(reducer, {})
+  const [state2, dispatch2] = useReducer(reducer, {})
+
   return (
     <div className="App">
-      <BoxContextProvider value={{ showErrors, app: { name: 'ZUCCA' } }}>
+
+      <BoxContextProvider
+        value={{
+          dispatch,
+          state: { global: state },
+          showErrors,
+          app: { name: 'ZUCCA' }
+        }}>
         <Box prefix="global" fields={model} />
       </BoxContextProvider>
-      <button onClick={() => setShowErrors(true)}>SHOW ERRORS</button>
-      {/*       <br />
-      <BoxContextProvider value={{ app: 'gino' }}>
+
+      <BoxContextProvider
+        value={{
+          dispatch: dispatch2,
+          state: { news: state2 },
+        }}>
         <Box prefix="news" fields={modelNews} />
-      </BoxContextProvider> */}
+      </BoxContextProvider>
+
+      <button onClick={() => setShowErrors(true)}>SHOW ERRORS</button>
     </div>
   );
 }

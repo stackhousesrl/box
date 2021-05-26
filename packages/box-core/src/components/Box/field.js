@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import React, { PureComponent } from 'react';
-import { connect, ReactReduxContext } from 'react-redux';
+import React, { PureComponent} from 'react';
+import { ReactReduxContext } from 'react-redux';
 import _get from 'lodash/get';
 import _size from 'lodash/size';
 import _isEmpty from 'lodash/isEmpty';
@@ -9,6 +9,7 @@ import _isFunction from 'lodash/isFunction';
 import { chooseSelectorByNode, chooseSelectorErrors, selectorRules } from '../../selectors'
 import { actionResetData } from '../../actions';
 import { select, getPath } from '../../utils';
+import hocConnect from '../../hoc-connect';
 
 class BoxField extends PureComponent {
   static contextType = ReactReduxContext;
@@ -56,16 +57,6 @@ class BoxField extends PureComponent {
     this.onDestroy();
   }
 
-  /*  
-  componentWillReceiveProps(nextProps) {
-    for (const index in nextProps) {
-      if (nextProps[index] !== this.props[index]) {
-        console.log(index, this.props[index], '-->', nextProps[index]);
-      }
-    }
-  } 
-  */
-
   resetField = () => {
     const { id, field, onChange, fieldId, setFlatId, defaultDestroyValue } = this.props;
     const { destroyValue = defaultDestroyValue } = field
@@ -95,8 +86,8 @@ class BoxField extends PureComponent {
   }
 
   onChange = value => {
-    const { field, onChange, fieldId } = this.props;
-    onChange(fieldId, value, field);
+    const { field, onChange, fieldId, dispatch } = this.props;
+    onChange(fieldId, value, field, dispatch);
     this.setState({ blur: false })
   }
 
@@ -264,8 +255,4 @@ const makeMapStateToProps = (state, props) => {
 };
 
 
-export default connect(
-  makeMapStateToProps,
-  null, null,
-  { forwardRef: true },
-)(BoxField);
+export default hocConnect(makeMapStateToProps)(BoxField)

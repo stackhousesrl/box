@@ -1,17 +1,17 @@
 /* eslint-disable prettier/prettier */
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moize from 'moize'
-import { connect } from 'react-redux';
 import { sortWithOrder, getPath, containerFields, cleanPath } from '../../utils';
 import EmptyContainer from '../empty';
 import { actionUpdate } from '../../actions';
-import { withBoxContext } from '../../context';
+import { BoxContext, withBoxContext } from '../../context';
 import WrapperField from './wrapper-field';
+import { useDispatch } from 'react-redux';
 
 const Controls = {};
 
-export const createBoxInstance = () => connect()(withBoxContext(class Box extends PureComponent {
+export const createBoxInstance = () => withBoxContext(class Box extends PureComponent {
 
   static defaultProps = {
     fields: [],
@@ -22,7 +22,7 @@ export const createBoxInstance = () => connect()(withBoxContext(class Box extend
     prefix: PropTypes.string,
     destroyValue: PropTypes.bool,
     ruleModeDisable: PropTypes.bool,
-    dispatch: PropTypes.func.isRequired,
+    // dispatch: PropTypes.func.isRequired,
     /* Fields {key: index } sort */
     sort: PropTypes.array,
     /* Form fields */
@@ -111,18 +111,16 @@ export const createBoxInstance = () => connect()(withBoxContext(class Box extend
     return this.state.flatIds;
   }
 
-  onChange = (id, value, field) => {
-    const { dispatch } = this.props;
+  onChange = (id, value, field, dispatch) => {
     const { onChange, validate } = field;
     const [reducer, ...selector] = id.split('.');
     dispatch(actionUpdate(cleanPath(reducer), selector.join('.'), value, validate));
     if (onChange) {
-      this.eventOnChange({ onChange, id, value, field, reducer })
+      this.eventOnChange({ onChange, id, value, field, reducer, dispatch })
     }
   };
 
-  eventOnChange = ({ onChange, id, value, field, reducer }) => {
-    const { dispatch } = this.props
+  eventOnChange = ({ onChange, id, value, field, reducer, dispatch }) => {
     const baseData = Object.assign({}, { id, value, field, reducer }, this.commonProps)
     if (typeof onChange === 'string') dispatch({ type: onChange, payload: baseData });
     else dispatch(onChange(baseData));
@@ -184,6 +182,6 @@ export const createBoxInstance = () => connect()(withBoxContext(class Box extend
     const { fields } = this.state
     return this.renderFields(fields, sort, getPath(prefix));
   }
-}))
+})
 
 export default createBoxInstance()
