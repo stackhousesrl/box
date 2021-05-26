@@ -67,6 +67,7 @@ const model = [
   {
     type: 'input',
     id: '#nome',
+    required: true
     /* validate: {
       '#nome': { eq: 'az' }
     }, */
@@ -171,6 +172,7 @@ const modelNews = [
 ]
 
 function reducer(state, action) {
+  console.log("TCL: reducer -> state, action", state, action)
   return set({ ...state }, action.payload.id, action.payload.value);
 }
 
@@ -195,9 +197,10 @@ function App() {
       <BoxContextProvider
         value={{
           dispatch: dispatch2,
-          state: { news: state2 },
+          state: state2,
+          showErrors
         }}>
-        <Box prefix="news" fields={modelNews} />
+        <Box fields={modelNews} />
       </BoxContextProvider>
 
       <button onClick={() => setShowErrors(true)}>SHOW ERRORS</button>

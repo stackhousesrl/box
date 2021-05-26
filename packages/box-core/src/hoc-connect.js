@@ -2,16 +2,16 @@ import React, { useContext, useMemo } from "react"
 import { connect } from "react-redux"
 import { BoxContext } from "./context"
 
-export default makeMapStateToProps => BoxField => props => {
+export default makeMapStateToProps => WrappedComponent => props => {
   const context = useContext(BoxContext)
 
   const ConnectedComponent = useMemo(() => context.state
-    ? BoxField
+    ? WrappedComponent
     : connect(
       makeMapStateToProps,
       null, null,
       { forwardRef: true },
-    )(BoxField),
+    )(WrappedComponent),
     [])
 
   if (context.state) {

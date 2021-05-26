@@ -5,9 +5,9 @@ import moize from 'moize'
 import { sortWithOrder, getPath, containerFields, cleanPath } from '../../utils';
 import EmptyContainer from '../empty';
 import { actionUpdate } from '../../actions';
-import { BoxContext, withBoxContext } from '../../context';
+import { withBoxContext } from '../../context';
 import WrapperField from './wrapper-field';
-import { useDispatch } from 'react-redux';
+import { isEmpty } from '@stackhouseos/json-rules/lib/utils';
 
 const Controls = {};
 
@@ -114,7 +114,9 @@ export const createBoxInstance = () => withBoxContext(class Box extends PureComp
   onChange = (id, value, field, dispatch) => {
     const { onChange, validate } = field;
     const [reducer, ...selector] = id.split('.');
-    dispatch(actionUpdate(cleanPath(reducer), selector.join('.'), value, validate));
+    const finalSelector = selector.length ? selector : [reducer]
+
+    dispatch(actionUpdate(cleanPath(reducer), finalSelector.join('.'), value, validate));
     if (onChange) {
       this.eventOnChange({ onChange, id, value, field, reducer, dispatch })
     }
@@ -152,6 +154,7 @@ export const createBoxInstance = () => withBoxContext(class Box extends PureComp
 
     const fieldId = getPath(prefix, prefixFieldsId, getId);
     const [reducer, ...selector] = fieldId.split('.');
+    const finalSelector = selector.length ? selector : [reducer]
 
     return (
       <WrapperField
@@ -165,7 +168,7 @@ export const createBoxInstance = () => withBoxContext(class Box extends PureComp
         flatIds={this.state.flatIds}
         setFlatId={this.setFlatIdsMemoized(fieldId)}
         reducer={reducer}
-        selector={selector.join('.')}
+        selector={finalSelector.join('.')}
         Control={Control}
         fieldType={typeof type === 'string' ? type : 'Class'}
         onChange={this.onChange}
