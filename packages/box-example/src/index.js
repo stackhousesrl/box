@@ -40,8 +40,8 @@ Box.extendControls({
   paper: ({ children }) => {
     return <div>{children}</div>
   },
-  button: memo(({ title, disabled }) => {
-    return <button disabled={disabled}>{title}</button>
+  button: memo(({ title, disabled, onAction }) => {
+    return <button onClick={onAction} disabled={disabled}>{title}</button>
   })
 })
 

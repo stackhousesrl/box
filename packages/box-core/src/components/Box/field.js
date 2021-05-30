@@ -97,18 +97,23 @@ class BoxField extends PureComponent {
 
   onAction = (paramsFromArgs) => {
     const { valueId, fieldId, dispatch, field, id, contextProps } = this.props;
+    const { dispatch: nodispatch, ...restContextProps } = contextProps
+
     const { store } = this.context;
     const { action, params: paramsField } = field;
     const selectorId = getPath(valueId || fieldId);
 
+    const reduxStore = (store && store.getState) ? store.getState() : {}
+    const state = { ...reduxStore, ...restContextProps }
+
     const [reducer, ...selector] = selectorId.split('.');
-    const value = select()(store.getState(), selectorId);
+    const value = select()(state, selectorId);
 
     if (action) {
       if (action === '#reset') {
         return dispatch(actionResetData(reducer, selector.join('.')));
       }
-      const baseData = Object.assign({}, contextProps, { params: paramsField || paramsFromArgs, value, id, field, fieldId, valueId, selectorId });
+      const baseData = Object.assign({}, restContextProps, { params: paramsField || paramsFromArgs, value, id, field, fieldId, valueId, selectorId });
       if (typeof action === 'string') return dispatch({ type: action, payload: baseData });
       else return action({ dispatch, payload: baseData });
     }

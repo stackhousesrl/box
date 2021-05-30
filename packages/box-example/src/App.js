@@ -119,8 +119,10 @@ const model = [
   },
   {
     type: 'button',
-    title: 'save',
-    action: "SAVE",
+    title: 'save1',
+    action: (...a) => {
+      console.log(a)
+    },
     ruleModeDisable: true,
     rules: {
       '^hasError': { eq: false }
