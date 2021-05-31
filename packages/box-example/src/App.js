@@ -66,6 +66,12 @@ const model = [
   {
     type: 'input',
     id: '#nome',
+    required: true,
+    validate: {
+      'nome': {
+        con: 'azz'
+      }
+    }
     /* validate: {
       '#nome': { eq: 'az' }
     }, */
@@ -99,19 +105,26 @@ const model = [
   {
     type: 'input',
     id: 'dati.cognome',
-    default: 'Z',
-    required: true,
-    rules: {
-      '#nome': { eq: 'az' }
-    },
-    validate: {
-      'dati.cognome': { eq: 'ZZ' }
-    },
-    label_rules: {
-      'titolo': {
-        enabled: { eq: true }
+    //default: 'Z',
+    required_rules: [
+      {
+        rules: {
+          'nome': { eq: 'az' }
+        },
+        value: true
       }
-    }
+    ],
+    /*     rules: {
+          '#nome': { eq: 'az' }
+        },
+        validate: {
+          'dati.cognome': { eq: 'ZZ' }
+        },
+        label_rules: {
+          'titolo': {
+            enabled: { eq: true }
+          }
+        } */
   },
   {
     type: 'button',
@@ -125,9 +138,17 @@ const model = [
   {
     type: 'text',
     text: 'OK',
+    color: 'green',
+    rules: {
+      '^isValid': { eq: true }
+    }
+  },
+  {
+    type: 'text',
+    text: 'ERR',
     color: 'red',
     rules: {
-      '^hasError': { eq: false }
+      '^hasError': { eq: true }
     }
   }
 ]

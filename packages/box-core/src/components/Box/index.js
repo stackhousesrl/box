@@ -51,7 +51,7 @@ export const createBoxInstance = () => connect()(withBoxContext(class Box extend
 
       const { pattern, required, validate } = field || {}
 
-      if (id && (pattern || required || validate)) {
+      if (id) {
         this.setState(state => ({
           flatIds: Object.assign({}, state.flatIds, {
             [id]: {
@@ -64,7 +64,8 @@ export const createBoxInstance = () => connect()(withBoxContext(class Box extend
         return
       }
 
-      cb()
+      if (cb)
+        cb()
     }
 
     const finalFallbackControl = (DefaultControl || EmptyContainer)

@@ -24,13 +24,13 @@ class BoxField extends PureComponent {
   }
 
   componentDidMount() {
-    const { field, setFlatId } = this.props;
+    const { setFlatId, validate, required, pattern } = this.props;
 
     const hasDefaultValue = typeof this.props.field.default === 'number'
       ? true
       : typeof this.props.field.default !== 'undefined'
 
-    setFlatId(field, () => {
+    setFlatId({ validate, required, pattern }, () => {
 
       if (typeof this.props.value === 'undefined' && hasDefaultValue && this.props.id) {
         this.onChange(this.props.field.default);
@@ -40,7 +40,18 @@ class BoxField extends PureComponent {
 
     })
 
+  }
 
+  componentDidUpdate(prevProps) {
+    const { setFlatId, validate, required, pattern, fieldId } = this.props;
+    const { validate: validatePrev, required: requiredPrev, pattern: patternPrev } = prevProps;
+    if (
+      validate !== validatePrev ||
+      required !== requiredPrev ||
+      pattern !== patternPrev
+    ) {
+      setFlatId({ validate, required, pattern })
+    }
   }
 
   onLoadHandler = () => {
@@ -55,16 +66,6 @@ class BoxField extends PureComponent {
     this.resetField();
     this.onDestroy();
   }
-
-  /*  
-  componentWillReceiveProps(nextProps) {
-    for (const index in nextProps) {
-      if (nextProps[index] !== this.props[index]) {
-        console.log(index, this.props[index], '-->', nextProps[index]);
-      }
-    }
-  } 
-  */
 
   resetField = () => {
     const { id, field, onChange, fieldId, setFlatId, defaultDestroyValue } = this.props;
@@ -208,9 +209,6 @@ const makeMapStateToProps = (state, props) => {
     value: valueFromProps,
     customSelectorId,
     customSelectorValue,
-    pattern,
-    required,
-    validate
   } = field;
 
   const makeSelectorId = customSelectorId || _isFunction(id)
@@ -252,15 +250,24 @@ const makeMapStateToProps = (state, props) => {
       })
   }, {});
 
-  const error = !disableErrors && fieldId && (pattern || required || validate) && chooseSelectorErrors(state, contextProps, fieldId, { pattern, required, validate }, prefix)
 
-  return {
+  const finalProps = {
+    pattern: field.pattern,
+    required: field.required,
+    validate: field.validate,
     ...field_with_rules,
     ...field_with_func,
     ...field_with_selector,
-    error,
     value
   };
+
+  const { required, pattern, validate } = finalProps
+  const error = !disableErrors && fieldId && (pattern || required || validate) && chooseSelectorErrors(state, contextProps, fieldId, { pattern, required, validate }, prefix)
+
+  return {
+    ...finalProps,
+    error
+  }
 };
 
 
