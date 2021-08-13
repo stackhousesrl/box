@@ -143,7 +143,7 @@ export const createBoxInstance = () => connect()(withBoxContext(class Box extend
       const [fieldKey] = inc.split('_fields');
       return Object.assign(acc,
         {
-          [fieldKey]: this.renderFields(_get(field, inc), undefined, prefix)
+          [fieldKey]: this.renderFields(_get(field, inc), prefix)
         })
     }, {});
 
@@ -189,18 +189,19 @@ export const createBoxInstance = () => connect()(withBoxContext(class Box extend
         Control={Control}
         fieldType={typeof type === 'string' ? type : 'Class'}
         onChange={this.onChange}
+        renderFields={this.renderFields}
       >
-        {fields && this.renderFields(fields, sort, fieldId)}
+        {fields && this.renderFields(fields, fieldId, sort)}
       </WrapperField>
     )
   };
 
-  renderFields = (fields, sort, prefix) => sortWithOrder(fields, sort).map((field, index) => this.renderField(field, index, prefix));
+  renderFields = (fields, prefix, sort) => sortWithOrder(fields, sort).map((field, index) => this.renderField(field, index, prefix));
 
   render() {
     const { sort, prefix } = this.props;
     const { fields } = this.state
-    return this.renderFields(fields, sort, getPath(prefix));
+    return this.renderFields(fields, getPath(prefix), sort);
   }
 }))
 
