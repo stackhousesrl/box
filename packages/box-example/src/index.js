@@ -37,8 +37,14 @@ Box.extendControls({
       {`${value}, ${nome}, ${cognome}, ${fromStore}`}
     </div>
   },
-  paper: ({ children }) => {
-    return <div>{children}</div>
+  paper: ({ children, bg = 'gray', item }) => {
+    return (
+      <div style={{ backgroundColor: bg, minHeight: 100, minWidth: 100, marginBottom: 10 }}>
+        <div>{item}</div>
+        <hr />
+        {children}
+      </div>
+    )
   },
   button: ({ title, disabled }) => {
     return <button disabled={disabled}>{title}</button>

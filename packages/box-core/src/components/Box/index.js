@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moize from 'moize'
 import { connect } from 'react-redux';
+import _get from 'lodash/get';
 import { sortWithOrder, getPath, containerFields, cleanPath } from '../../utils';
 import EmptyContainer from '../empty';
 import { actionUpdate } from '../../actions';
@@ -134,6 +135,21 @@ export const createBoxInstance = () => connect()(withBoxContext(class Box extend
     return commonProps;
   }
 
+  nestedFields = (field, prefix) => {
+    const fieldsList = Object.keys(field).filter(e => e.indexOf('_fields') > 0)
+    if (!fieldsList.length) return
+
+    const _fields = fieldsList.reduce((acc, inc) => {
+      const [fieldKey] = inc.split('_fields');
+      return Object.assign(acc,
+        {
+          [fieldKey]: this.renderFields(_get(field, inc), undefined, prefix)
+        })
+    }, {});
+
+    return _fields
+  }
+
   renderField = (field, index, prefix) => {
     const { destroyValue } = this.props
     const {
@@ -159,6 +175,7 @@ export const createBoxInstance = () => connect()(withBoxContext(class Box extend
     return (
       <WrapperField
         {...this.commonProps}
+        {...this.nestedFields(field, fieldId)}
         key={`${fieldId}-${index}`}
         id={id}
         defaultDestroyValue={destroyValue}

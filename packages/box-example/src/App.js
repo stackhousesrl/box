@@ -15,6 +15,41 @@ const model = [
     type: 'text',
     text: '^app.name'
   },
+  {
+    type: 'paper',
+    fields: [
+      {
+        type: 'input',
+        id: '#indirizzo',
+        required: true,
+      }
+    ]
+  },
+  {
+    type: 'paper',
+    bg: '#eee',
+    prefix: 'data',
+    item_fields: [
+      {
+        type: 'text',
+        text: '^app.name'
+      },
+      {
+        type: 'input',
+        id: 'citta',
+        required: true,
+      },
+      {
+        type: 'paper',
+        item_fields: [
+          {
+            type: 'text',
+            id: 'citta'
+          },
+        ]
+      }
+    ]
+  },
   /* {
     type: 'paper',
     prefix: 'dati',
