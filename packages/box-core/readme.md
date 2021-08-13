@@ -124,7 +124,8 @@ I tuoi componenti custom riceveranno in automatico le seguenti props, oltre al t
 | onAction  | `func`   | Da utilizzare per invocare il dispatch                                  |
 | disabled  | `bool`   | in base alla rules                                                      |
 | error     | `string` | in base a validation                                                    |
-| onBlur    | `func`   | Necessario per la validazione degli input                               |
+| onBlur    | `func`   | Necessario per attivare la validazione degli input                               |
+| renderFields    | `func`   | Utile per renderizzare nuovi componenti nello stesso contesto di validazione                               |
 
 
 ## Id
