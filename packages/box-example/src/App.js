@@ -28,7 +28,7 @@ const model = [
   {
     container: { type: 'div', id: 'base' },
     type: 'paper',
-    bg: '#eee',
+    bg: '#cc0',
     prefix: 'data',
     item_fields: [
       {
@@ -48,7 +48,11 @@ const model = [
             id: 'citta'
           },
         ]
-      }
+      },
+      {
+        type: 'text',
+        id: 'citta',
+      },
     ]
   },
   /* {
@@ -140,17 +144,18 @@ const model = [
   }, */
   {
     type: 'input',
-    id: 'dati.cognome',
+    id: 'dati.cognome2',
     //default: 'Z',
     required_rules: [
       {
         rules: {
-          'nome': { eq: 'az' }
+          'nome': { con: 'azzo' }
         },
         value: true
       }
     ],
-    /*     rules: {
+    /*  
+        rules: {
           '#nome': { eq: 'az' }
         },
         validate: {

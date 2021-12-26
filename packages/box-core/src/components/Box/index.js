@@ -44,7 +44,6 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     this.state = { flatIds: {}, fields };
 
     const fn = id => (field, cb) => {
-
       if (id && field === undefined) {
         this.setState(state => ({
           flatIds: Object.assign({}, state.flatIds, { [id]: undefined })
@@ -58,10 +57,9 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
         this.setState(state => ({
           flatIds: Object.assign({}, state.flatIds, {
             [id]: {
-              pattern,
-              required,
-              validate,
-              ...state.flatIds[id]
+              pattern: _get(state.flatIds, [id, 'pattern']) ?? pattern,
+              required: _get(state.flatIds, [id, 'required']) ?? required,
+              validate: _get(state.flatIds, [id, 'validate']) ?? validate,
             }
           })
         }), cb);
@@ -109,7 +107,7 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     const { store } = this.context;
     const { contextProps, prefix } = this.props;
     const { flatIds } = this.state;
-    const { hasError, results } = chooseSelectorGlobalErrors(store.getState(), contextProps, null, flatIds, prefix)
+    const { hasError, results } = chooseSelectorGlobalErrors(store.getState(), contextProps, null, flatIds, prefix, true)
     return { ok: hasError === false, errors: results }
   }
 

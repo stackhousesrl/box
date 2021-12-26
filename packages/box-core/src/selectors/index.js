@@ -40,12 +40,13 @@ export const chooseSelectorGlobalErrors = createSelector(
   (state, extraData) => extraData,
   (state, b, c, fields) => fields,
   (state, b, c, d, prefix) => prefix,
-  (data, extraData, fields, prefix) => {
+  (state, b, c, d, p, checkAll) => checkAll,
+  (data, extraData, fields, prefix, checkAll) => {
     if (Object.keys(fields).length === 0) return { hasError: false }
     const validation = generateValidationsObject(Object.entries(fields).filter(([k, v]) => !!v).map(([key, val]) => Object.assign({}, val, {
       id: transformPrefix(key, prefix)
     })));
-    const [hasError, results] = checkRules(validation, Object.assign({}, data, extraData), false, { prefix })
+    const [hasError, results] = checkRules(validation, Object.assign({}, data, extraData), false, { prefix, checkAll })
     return { hasError, results }
   }
 );

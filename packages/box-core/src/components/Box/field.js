@@ -43,7 +43,7 @@ class BoxField extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { setFlatId, validate, required, pattern, fieldId } = this.props;
+    const { setFlatId, validate, required, pattern } = this.props;
     const { validate: validatePrev, required: requiredPrev, pattern: patternPrev } = prevProps;
     if (
       validate !== validatePrev ||

@@ -1611,31 +1611,10 @@
   resolved "https://registry.yarnpkg.com/@sheerun/mutationobserver-shim/-/mutationobserver-shim-0.3.3.tgz#5405ee8e444ed212db44e79351f0c70a582aae25"
   integrity sha512-DetpxZw1fzPD5xUBrIAoplLChO2VB8DlL5Gg+I1IR9b2wPqYIca2WSUxL5g1vLeR4MsQq1NeWriXAVffV+U1Fw==
 
-"@stackhouseos/box-core@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@stackhouseos/box-core/-/box-core-3.3.0.tgz#24bbc33e91b3379580f395f381637daa9dd3baed"
-  integrity sha512-fVK3cof6HfmogBqEaLCgN/wEl4Zka7GsIockjeV6+mAHuGRhHghQLzx1oOr5pBnnv7EhkPu+Su7eWY6G4vQKzg==
-  dependencies:
-    "@stackhouseos/json-rules" "^1.x.x"
-    classnames "^2.2.6"
-    hoist-non-react-statics "^3.3.1"
-    immer "^6.0.2"
-    is-buffer "^2.0.4"
-    lodash "^4.17.15"
-    moize "^5.4.7"
-    reselect "^4.0.0"
-
-"@stackhouseos/json-rules@^1.2.2":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@stackhouseos/json-rules/-/json-rules-1.2.3.tgz#5d8f5d3a792d598b629bffbe2361b3bdc343bcc3"
-  integrity sha512-bXW57TRHgez79a7y03MSP6xNpeSLbhPTYtU4PLRL0RttfgWHdUW1rX4cyhpSeyevbkzeBgUxjcde5JdW5k7YeA==
-  dependencies:
-    lodash "^4.17.15"
-
-"@stackhouseos/json-rules@^1.x.x":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@stackhouseos/json-rules/-/json-rules-1.2.1.tgz#792adf82b5a418e241f7472bf2114d039b4efe42"
-  integrity sha512-juIr4NP38yj+hFITz+ph3j8wfdnvr9++eHMCu3IbQt61IG52Jb4tSnG4XR5vxvM+maUr5hRxtocejSpBA0TkSw==
+"@stackhouseos/json-rules@^1.2.5":
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@stackhouseos/json-rules/-/json-rules-1.2.5.tgz#43a0af7376b550f43da5ba4d259decbb525787ab"
+  integrity sha512-qIYLnykBYICMMzs55JAyeGPFbvO4+CmBzUY36dW/sdC0+zzROTHELF/NoUWkJGNpO7670ZTTILoeqwdxDui9ow==
   dependencies:
     lodash "^4.17.15"
 
@@ -3295,11 +3274,6 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
-
-classnames@^2.2.6:
-  version "2.2.6"
-  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
-  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
 
 clean-css@^4.2.3:
   version "4.2.3"
