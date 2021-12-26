@@ -6,6 +6,9 @@ import _findKey from 'lodash/findKey';
 import _isFunction from 'lodash/isFunction';
 import _join from 'lodash/join';
 import _startsWith from 'lodash/startsWith';
+import _isPlainObject from 'lodash/isPlainObject';
+import _mapKeys from 'lodash/mapKeys';
+import _mapValues from 'lodash/mapValues';
 import checkRules, { getKeys } from '@stackhouseos/json-rules';
 import { unflatten } from '../flat';
 import { cleanPath, cleanPathHash, isImmutable } from '../utils';
@@ -38,12 +41,12 @@ export const chooseSelectorGlobalErrors = createSelector(
   (state, b, c, fields) => fields,
   (state, b, c, d, prefix) => prefix,
   (data, extraData, fields, prefix) => {
-    if (Object.keys(fields).length === 0) return false
+    if (Object.keys(fields).length === 0) return { hasError: false }
     const validation = generateValidationsObject(Object.entries(fields).filter(([k, v]) => !!v).map(([key, val]) => Object.assign({}, val, {
       id: transformPrefix(key, prefix)
     })));
-    const [error] = checkRules(validation, Object.assign({}, data, extraData), false, { prefix })
-    return error
+    const [hasError, results] = checkRules(validation, Object.assign({}, data, extraData), false, { prefix })
+    return { hasError, results }
   }
 );
 
@@ -53,8 +56,8 @@ export const selectorRulesDisabled = createSelector(
   (a, b, rules) => rules,
   (a, b, rules, fields, prefix) => prefix,
   chooseSelectorGlobalErrors,
-  (state, extraData, rules, prefix, hasError) => {
-    const data = Object.assign({}, state, extraData, { hasError, isValid: !hasError })
+  (state, extraData, rules, prefix, hasGloablError) => {
+    const data = Object.assign({}, state, extraData, { hasError: hasGloablError.hasError, isValid: !hasGloablError.hasError })
     const r = _isFunction(rules) ? rules(data) : rules;
     if (!r) return false
     const keys = getKeys(r, { prefix });
@@ -70,11 +73,37 @@ export const chooseSelectorByNode = createSelector(
   (data) => data
 );
 
+function mapKeysDeepLodash(obj, cb, isRecursive) {
+  if (!obj && !isRecursive) {
+    return {};
+  }
+
+  if (!isRecursive) {
+    if (typeof obj === "string" || typeof obj === "number" || typeof obj === "boolean") {
+      return {};
+    }
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(item => mapKeysDeepLodash(item, cb, true));
+  }
+
+  if (!_isPlainObject(obj)) {
+    return obj;
+  }
+
+  const result = _mapKeys(obj, cb);
+
+  return _mapValues(result, value =>
+    mapKeysDeepLodash(value, cb, true)
+  );
+};
+
 const generateValidationsObject = (fields) => {
   return fields.filter((e) => e.id && (e.pattern || e.required || e.validate))
     .map((inc) => ({
       and: [
-        inc.validate,
+        inc.validate && mapKeysDeepLodash(inc.validate, (v, key) => key === "self" ? inc.id : key),
         inc.pattern && {
           [inc.id]: { re: inc.pattern },
         },
@@ -85,7 +114,6 @@ const generateValidationsObject = (fields) => {
     }));
 }
 
-// (state, contextProps, fieldId, field, prefix)
 export const chooseSelectorErrors = createSelector(
   getStateData,
   (state, extraData) => extraData,

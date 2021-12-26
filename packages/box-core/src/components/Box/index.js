@@ -2,17 +2,19 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moize from 'moize'
-import { connect } from 'react-redux';
+import { connect, ReactReduxContext } from 'react-redux';
 import _get from 'lodash/get';
 import { sortWithOrder, getPath, containerFields, cleanPath } from '../../utils';
 import EmptyContainer from '../empty';
 import { actionUpdate } from '../../actions';
 import { withBoxContext } from '../../context';
 import WrapperField from './wrapper-field';
+import { chooseSelectorGlobalErrors } from '../../selectors';
 
 const Controls = {};
 
-export const createBoxInstance = () => connect()(withBoxContext(class Box extends PureComponent {
+export const createBoxInstance = () => connect(null, null, null, { forwardRef: true })(withBoxContext(class Box extends PureComponent {
+  static contextType = ReactReduxContext;
 
   static defaultProps = {
     fields: [],
@@ -58,7 +60,8 @@ export const createBoxInstance = () => connect()(withBoxContext(class Box extend
             [id]: {
               pattern,
               required,
-              validate
+              validate,
+              ...state.flatIds[id]
             }
           })
         }), cb);
@@ -100,6 +103,14 @@ export const createBoxInstance = () => connect()(withBoxContext(class Box extend
   static setControl(type, Control) {
     Box.Controls = Object.assign({}, Box.Controls, { [type]: Control });
     return Box;
+  }
+
+  isValid = () => {
+    const { store } = this.context;
+    const { contextProps, prefix } = this.props;
+    const { flatIds } = this.state;
+    const { hasError, results } = chooseSelectorGlobalErrors(store.getState(), contextProps, null, flatIds, prefix)
+    return { ok: hasError === false, errors: results }
   }
 
   componentDidUpdate(prevProps) {

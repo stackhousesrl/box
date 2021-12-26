@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './App.css';
 import Box, { BoxContextProvider } from '@stackhouseos/box-core'
 import { createSelector } from 'reselect';
@@ -26,13 +26,14 @@ const model = [
     ]
   },
   {
+    container: { type: 'div', id: 'base' },
     type: 'paper',
     bg: '#eee',
     prefix: 'data',
     item_fields: [
       {
         type: 'text',
-        text: '^app.name'
+        text: 'citta'
       },
       {
         type: 'input',
@@ -172,7 +173,7 @@ const model = [
   },
   {
     type: 'text',
-    text: 'OK',
+    text: 'VALIDO',
     color: 'green',
     rules: {
       '^isValid': { eq: true }
@@ -180,7 +181,7 @@ const model = [
   },
   {
     type: 'text',
-    text: 'ERR',
+    text: 'ERRORI',
     color: 'red',
     rules: {
       '^hasError': { eq: true }
@@ -244,12 +245,17 @@ const modelNews = [
 
 function App() {
   const [showErrors, setShowErrors] = useState()
+  const ref = useRef()
+
   return (
     <div className="App">
       <BoxContextProvider value={{ showErrors, app: { name: 'ZUCCA' } }}>
-        <Box prefix="global" fields={model} />
+        <Box prefix="global" fields={model} ref={ref} />
       </BoxContextProvider>
-      <button onClick={() => setShowErrors(true)}>SHOW ERRORS</button>
+      <button onClick={() => {
+        setShowErrors(true)
+        console.log(ref.current.isValid())
+      }}>SHOW ERRORS</button>
       {/*       <br />
       <BoxContextProvider value={{ app: 'gino' }}>
         <Box prefix="news" fields={modelNews} />
