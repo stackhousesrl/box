@@ -1,6 +1,6 @@
 {
   "name": "@stackhouseos/box-core",
-  "version": "4.6.0",
+  "version": "4.6.1",
   "description": "Json generator layout",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   "author": "Stackhouse SRL",
   "license": "ISC",
   "dependencies": {
-    "@stackhouseos/json-rules": "^1.2.5",
+    "@stackhouseos/json-rules": "^1.2.6",
     "hoist-non-react-statics": "^3.3.1",
     "immer": "^8.0.0",
     "is-buffer": "^2.0.4",
