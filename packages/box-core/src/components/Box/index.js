@@ -44,26 +44,48 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     this.state = { flatIds: {}, fields };
 
     const fn = id => (field, cb) => {
-      if (id && field === undefined) {
-        this.setState(state => ({
-          flatIds: Object.assign({}, state.flatIds, { [id]: undefined })
-        }), cb);
-        return
-      }
-
-      const { pattern, required, validate } = field || {}
-
       if (id) {
-        this.setState(state => ({
-          flatIds: Object.assign({}, state.flatIds, {
-            [id]: {
-              pattern: _get(state.flatIds, [id, 'pattern']) ?? pattern,
-              required: _get(state.flatIds, [id, 'required']) ?? required,
-              validate: _get(state.flatIds, [id, 'validate']) ?? validate,
+
+        if (field === undefined) {
+
+          this.setState(state => ({
+            flatIds: Object.assign({}, state.flatIds, { [id]: undefined })
+          }), cb);
+
+          return
+
+        } else {
+
+          const { pattern = false, required = false, validate = false } = field || {}
+
+          this.setState(state => {
+            // nel caso ci sia pù volte lo stesso campo, usato la prima volta con un validatore e dopo solo in visualizzazione
+            if (
+              typeof field.pattern === 'undefined' &&
+              typeof field.required === 'undefined' &&
+              typeof field.validate === 'undefined' &&
+              typeof _get(this.state.flatIds, [id]) === 'undefined'
+            ) {
+              return
             }
-          })
-        }), cb);
-        return
+
+            return {
+              flatIds: Object.assign({}, state.flatIds, {
+                [id]: {
+                  pattern: pattern ?? _get(state.flatIds, [id, 'pattern']),
+                  required: required ?? _get(state.flatIds, [id, 'required']),
+                  validate: validate ?? _get(state.flatIds, [id, 'validate']),
+                }
+              })
+            }
+          }, cb);
+
+          return
+
+        }
+
+
+
       }
 
       if (cb)

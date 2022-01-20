@@ -55,6 +55,17 @@ const model = [
       },
     ]
   },
+  {
+    container: {
+      type: 'paper',
+      bg: 'red',
+    },
+    type: 'text',
+    id: 'citta',
+    rules: {
+      '^fieldId': { con: 'citta' }
+    }
+  },
   /* {
     type: 'paper',
     prefix: 'dati',
@@ -191,7 +202,7 @@ const model = [
     rules: {
       '^hasError': { eq: true }
     }
-  }
+  },
 ]
 
 const modelNews = [
