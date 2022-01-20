@@ -29,10 +29,10 @@ class WrapperField extends PureComponent {
 }
 
 const makeMapStateToProps = (state, props) => {
-  const { prefix, field, contextProps, flatIds, disableRules } = props;
+  const { prefix, field, contextProps, flatIds, disableRules, fieldId } = props;
   const { rules } = field;
   return {
-    disabled: !disableRules && rules && selectorRulesDisabled(state, contextProps, rules, flatIds, prefix),
+    disabled: !disableRules && rules && selectorRulesDisabled(state, contextProps, rules, flatIds, prefix, false, fieldId),
     flatIds: undefined
   };
 };

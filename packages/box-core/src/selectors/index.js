@@ -57,8 +57,9 @@ export const selectorRulesDisabled = createSelector(
   (a, b, rules) => rules,
   (a, b, rules, fields, prefix) => prefix,
   chooseSelectorGlobalErrors,
-  (state, extraData, rules, prefix, hasGloablError) => {
-    const data = Object.assign({}, state, extraData, { hasError: hasGloablError.hasError, isValid: !hasGloablError.hasError })
+  (a, b, rules, fields, prefix, showAll, fieldId) => fieldId,
+  (state, extraData, rules, prefix, hasGloablError, fieldId) => {
+    const data = Object.assign({}, state, extraData, { hasError: hasGloablError.hasError, isValid: !hasGloablError.hasError, fieldId })
     const r = _isFunction(rules) ? rules(data) : rules;
     if (!r) return false
     const keys = getKeys(r, { prefix });
