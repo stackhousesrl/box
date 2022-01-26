@@ -4,6 +4,7 @@ declare module '@stackhouseos/box-core' {
     export type BoxProps = {
         prefix: string;
         fields: BoxField | BoxField[];
+        destroyValue?: boolean
     }
     
     export type BoxField = Partial<BoxProps> & {
