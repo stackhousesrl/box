@@ -21,18 +21,12 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
   };
 
   static propTypes = {
-    /* Initial form value */
     prefix: PropTypes.string,
     destroyValue: PropTypes.bool,
     ruleModeDisable: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
-    /* Fields {key: index } sort */
-    sort: PropTypes.array,
     /* Form fields */
-    fields: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.object,
-    ]).isRequired,
+    fields: PropTypes.array.isRequired,
     /* Function called when form value changes */
     onChange: PropTypes.func,
   };
@@ -166,7 +160,7 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     return commonProps;
   }
 
-  nestedFields = (field, prefix) => {
+  nestedFields = (field, prefix, prefixFunc) => {
     const fieldsList = Object.keys(field).filter(e => e.indexOf('_fields') > 0)
     if (!fieldsList.length) return
 
@@ -174,20 +168,19 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
       const [fieldKey] = inc.split('_fields');
       return Object.assign(acc,
         {
-          [fieldKey]: this.renderFields(_get(field, inc), prefix)
+          [fieldKey]: this.renderFields(_get(field, inc), prefix, prefixFunc)
         })
     }, {});
 
     return _fields
   }
 
-  renderField = (field, index, prefix) => {
+  renderField = (field, index, prefix, prefixFunc) => {
     const { destroyValue } = this.props
     const {
       type,
       id,
       fields,
-      sort,
       prefix: prefixFieldsId,
     } = field;
 
@@ -200,17 +193,17 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
 
     const getId = typeof id === 'string' && id
 
-    const fieldId = getPath(prefix, prefixFieldsId, getId);
+    const fieldId = getPath(prefix, prefixFieldsId, getId, prefixFunc);
     const [reducer, ...selector] = fieldId.split('.');
 
     return (
       <WrapperField
         {...this.commonProps}
-        {...this.nestedFields(field, fieldId)}
+        {...this.nestedFields(field, fieldId, prefixFunc)}
         key={`${fieldId}-${index}`}
         id={id}
         defaultDestroyValue={destroyValue}
-        prefix={prefix}
+        prefix={prefixFunc ? prefixFunc(prefix).prefix : prefix}
         field={field}
         fieldId={fieldId}
         flatIds={this.state.flatIds}
@@ -222,17 +215,17 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
         onChange={this.onChange}
         renderFields={this.renderFields}
       >
-        {fields && this.renderFields(fields, fieldId, sort)}
+        {fields && this.renderFields(fields, fieldId, prefixFunc)}
       </WrapperField>
     )
   };
 
-  renderFields = (fields, prefix, sort) => sortWithOrder(fields, sort).map((field, index) => this.renderField(field, index, prefix));
+  renderFields = (fields, prefix, prefixFunc) => fields.map((field, index) => this.renderField(field, index, prefix, prefixFunc));
 
   render() {
-    const { sort, prefix } = this.props;
+    const { prefix, prefixFunc } = this.props;
     const { fields } = this.state
-    return this.renderFields(fields, getPath(prefix), sort);
+    return this.renderFields(fields, getPath(prefix, undefined, undefined, prefixFunc), prefixFunc);
   }
 }))
 

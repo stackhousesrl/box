@@ -20,27 +20,33 @@ export const select = () => (state, name) => {
   return isImmutable(state) ? _get(state.get(reducer), rest) : _get(state, name)
 };
 
-export const getPath = (prefix, prefixFieldsId, id) => {
+export const getPath = (prefix, prefixFieldsId, id, prefixFunc) => {
+  const {
+    prefix: prefixValue,
+    prefixFieldsId: prefixFieldsIdValue,
+    id: idValue
+  } = prefixFunc ? prefixFunc(prefix, prefixFieldsId, id) : { prefix, prefixFieldsId, id }
+  
   const res = [
-    ...(prefix || '').split('.'),
-    ...(prefixFieldsId || '').split('.'),
-    ...(id || '').split('.'),
+    ...(prefixValue || '').split('.'),
+    ...(prefixFieldsIdValue || '').split('.'),
+    ...(idValue || '').split('.'),
   ].filter(Boolean);
 
-  if ((id || '').indexOf('^') === 0) {
-    return cleanPath(id);
+  if ((idValue || '').indexOf('^') === 0) {
+    return cleanPath(idValue);
   }
 
-  if ((id || '').indexOf('#') === 0) {
-    return cleanPathHash(id, prefix);
+  if ((idValue || '').indexOf('#') === 0) {
+    return cleanPathHash(idValue, prefixValue);
   }
 
-  if ((prefixFieldsId || '').indexOf('^') === 0) {
-    return cleanPath(prefixFieldsId);
+  if ((prefixFieldsIdValue || '').indexOf('^') === 0) {
+    return cleanPath(prefixFieldsIdValue);
   }
 
-  if ((prefixFieldsId || '').indexOf('#') === 0) {
-    return cleanPathHash(prefixFieldsId, prefix);
+  if ((prefixFieldsIdValue || '').indexOf('#') === 0) {
+    return cleanPathHash(prefixFieldsIdValue, prefixValue);
   }
 
   return res.join('.');

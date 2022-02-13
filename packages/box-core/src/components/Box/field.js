@@ -125,6 +125,9 @@ class BoxField extends PureComponent {
   }
 
   onBlur = () => this.setState({ blur: true })
+  setError = () => {
+
+  }
 
   get getError() {
     const { blur } = this.state
@@ -187,6 +190,7 @@ class BoxField extends PureComponent {
         {...actions}
         value={this.value}
         onBlur={this.onBlur}
+        setError={this.setError}
         error={this.errorText}
         onChange={this.onChange}
         changeState={saveOnState && this.onChangeState}
