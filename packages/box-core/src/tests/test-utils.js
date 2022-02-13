@@ -1,11 +1,8 @@
 // test-utils.jsx
-import React from 'react'
-import { render as rtlRender } from '@testing-library/react'
-import { configureStore, createSlice } from '@reduxjs/toolkit'
-import { Provider } from 'react-redux'
+import { createSlice } from '@reduxjs/toolkit'
 import { set } from 'lodash'
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
   name: 'app',
   initialState: {
 
@@ -16,22 +13,3 @@ const userSlice = createSlice({
       set(state, action.payload.id, action.payload.value),
   },
 })
-
-function render(
-  ui,
-  {
-    preloadedState,
-    store = configureStore({ reducer: { app: userSlice.reducer }, preloadedState }),
-    ...renderOptions
-  } = {}
-) {
-  function Wrapper({ children }) {
-    return <Provider store={store}>{children}</Provider>
-  }
-  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
-}
-
-// re-export everything
-export * from '@testing-library/react'
-// override render method
-export { render }

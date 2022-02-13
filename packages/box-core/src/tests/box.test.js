@@ -8,9 +8,11 @@ import { shallow, mount, render } from 'enzyme';
 const mockStore = configureStore([]);
 
 const Text = ({ text, value }) => <h1>{text || value}</h1>
+const Input = ({ onChange, value, name }) => <input name={name} value={value} onChange={evt => onChange(evt.target.value)} />
 const Container = ({ children }) => <div>{children}</div>
 
 Box.setControls({
+  Input,
   Text,
   Container
 })
@@ -42,6 +44,25 @@ describe('Test fields', () => {
     );
 
     expect(wrapper.html()).toEqual('<h1>andrea</h1>')
+
+  })
+
+  it('Quando passo un field non valido, mi aspetto il render dell\'elemento correttamente', () => {
+
+    const fields = [
+      {
+        type: 'TextNO',
+        text: 'andrea'
+      }
+    ]
+
+    const wrapper = render(
+      <Provider store={store}>
+        <Box fields={fields} prefix="app" />
+      </Provider>
+    );
+
+    expect(wrapper.html()).toEqual('')
 
   })
 
