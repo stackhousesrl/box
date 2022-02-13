@@ -1,6 +1,6 @@
 {
   "name": "@stackhouseos/box-core",
-  "version": "4.6.3",
+  "version": "4.7.0",
   "description": "Json generator layout",
   "repository": {
     "type": "git",
@@ -13,7 +13,10 @@
     "prepublish": "yarn task-babel",
     "task-babel-watch": "yarn task-babel -w",
     "task-babel": "babel -d lib src --copy-files --no-comments --minified",
-    "test": "mocha -w --require @babel/register ./tests"
+    "task-babel-dev": "babel -d lib src --copy-files",
+    "test": "jest",
+    "test-w": "jest --watch",
+    "coverage": "jest --collect-coverage"
   },
   "author": "Stackhouse SRL",
   "license": "ISC",
@@ -25,6 +28,17 @@
     "lodash": "^4.17.15",
     "moize": "^5.4.7",
     "reselect": "^4.0.0"
+  },
+  "devDependencies": {
+    "@reduxjs/toolkit": "^1.7.2",
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.2",
+    "babel-jest": "^27.0.2",
+    "enzyme": "3.11.0",
+    "enzyme-adapter-react-16": "1.15.5",
+    "jest": "27.0.4",
+    "react-test-renderer": "^17.0.2",
+    "redux-mock-store": "^1.5.4"
   },
   "peerDependencies": {
     "prop-types": ">=15",
