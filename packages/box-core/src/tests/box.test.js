@@ -3,7 +3,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import Box from '../index'
 import configureStore from 'redux-mock-store';
-import { shallow, mount, render } from 'enzyme';
+import { render } from 'enzyme';
 
 const mockStore = configureStore([]);
 
