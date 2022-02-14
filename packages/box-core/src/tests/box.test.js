@@ -218,6 +218,13 @@ describe('Test value by root id', () => {
       app: {
         name: 'andrea',
       },
+      app3: {
+        data: {
+          valore: {
+            secondName: 'carla'
+          }
+        }
+      }
     });
   });
 
@@ -294,6 +301,43 @@ describe('Test value by root id', () => {
     );
 
     expect(wrapper.html()).toEqual(`<div><h1>andrea</h1></div><div><h1>carla</h1></div>`)
+  })
+
+  it('Quando passo fields validi nested con prefix nei nodi, mi aspetto il render dell\'elemento correttamente', () => {
+
+    const fields = [
+      {
+        container: 'Container',
+        type: 'Text',
+        id: '^app.name'
+      },
+      {
+        type: 'Container',
+        prefix: 'data',
+        fields: [
+          {
+            type: 'Container',
+            prefix: 'valore',
+            fields: [
+              {
+                type: 'Text',
+                id: 'secondName'
+              }
+            ]
+          }
+        ]
+      }
+    ]
+
+    const wrapper = render(
+      <Provider store={store}>
+        <div>
+          <Box fields={fields} prefix="app3" />
+        </div>
+      </Provider>
+    );
+
+    expect(wrapper.html()).toEqual(`<div><h1>andrea</h1></div><div><div><h1>carla</h1></div></div>`)
   })
 
 })
