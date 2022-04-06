@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import moize from 'moize'
 import { connect, ReactReduxContext } from 'react-redux';
 import _get from 'lodash/get';
-import { sortWithOrder, getPath, containerFields, cleanPath } from '../../utils';
+import { sortWithOrder, getPath, containerChildren, cleanPath } from '../../utils';
 import EmptyContainer from '../empty';
 import { actionUpdate } from '../../actions';
 import { withBoxContext } from '../../context';
@@ -17,7 +17,7 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
   static contextType = ReactReduxContext;
 
   static defaultProps = {
-    fields: [],
+    children: [],
   };
 
   static propTypes = {
@@ -25,8 +25,8 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     destroyValue: PropTypes.bool,
     ruleModeDisable: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
-    /* Form fields */
-    fields: PropTypes.array.isRequired,
+    /* Form children */
+    children: PropTypes.array.isRequired,
     /* Function called when form value changes */
     onChange: PropTypes.func,
   };
@@ -34,8 +34,8 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
   constructor(props) {
     super();
     const { DefaultControl, defaultType } = props
-    const fields = containerFields(props.fields);
-    this.state = { flatIds: {}, fields };
+    const children = containerChildren(props.children);
+    this.state = { flatIds: {}, children };
 
     const fn = id => (field, cb) => {
       if (id) {
@@ -128,9 +128,9 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.fields !== this.props.fields) {
-      const fields = containerFields(this.props.fields);
-      this.setState({ fields })
+    if (prevProps.children !== this.props.children) {
+      const children = containerChildren(this.props.children);
+      this.setState({ children })
     }
   }
 
@@ -156,23 +156,23 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
   }
 
   get commonProps() {
-    const { DefaultControl, defaultType, fields, sort, staticContext, ...commonProps } = this.props;
+    const { DefaultControl, defaultType, children, sort, staticContext, ...commonProps } = this.props;
     return commonProps;
   }
 
-  nestedFields = (field, prefix, prefixFunc) => {
-    const fieldsList = Object.keys(field).filter(e => e.indexOf('_fields') > 0)
-    if (!fieldsList.length) return
+  nestedChildren = (field, prefix, prefixFunc) => {
+    const childrenList = Object.keys(field).filter(e => e.indexOf('_children') > 0)
+    if (!childrenList.length) return
 
-    const _fields = fieldsList.reduce((acc, inc) => {
-      const [fieldKey] = inc.split('_fields');
+    const _children = childrenList.reduce((acc, inc) => {
+      const [fieldKey] = inc.split('_children');
       return Object.assign(acc,
         {
-          [fieldKey]: this.renderFields(_get(field, inc), prefix, prefixFunc)
+          [fieldKey]: this.renderChildren(_get(field, inc), prefix, prefixFunc)
         })
     }, {});
 
-    return _fields
+    return _children
   }
 
   renderField = (field, index, prefix, prefixFunc) => {
@@ -180,8 +180,8 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     const {
       type,
       id,
-      fields,
-      prefix: prefixFieldsId,
+      children,
+      prefix: prefixChildrenId,
     } = field;
 
     const Control = this.getControlMemoized(type)
@@ -193,13 +193,13 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
 
     const getId = typeof id === 'string' && id
 
-    const fieldId = getPath(prefix, prefixFieldsId, getId, prefixFunc);
+    const fieldId = getPath(prefix, prefixChildrenId, getId, prefixFunc);
     const [reducer, ...selector] = fieldId.split('.');
 
     return (
       <WrapperField
         {...this.commonProps}
-        {...this.nestedFields(field, fieldId, prefixFunc)}
+        {...this.nestedChildren(field, fieldId, prefixFunc)}
         key={`${fieldId}-${index}`}
         id={id}
         defaultDestroyValue={destroyValue}
@@ -213,19 +213,19 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
         Control={Control}
         fieldType={typeof type === 'string' ? type : 'Class'}
         onChange={this.onChange}
-        renderFields={this.renderFields}
+        renderChildren={this.renderChildren}
       >
-        {fields && this.renderFields(fields, fieldId, prefixFunc)}
+        {children && this.renderChildren(children, fieldId, prefixFunc)}
       </WrapperField>
     )
   };
 
-  renderFields = (fields, prefix, prefixFunc) => fields.map((field, index) => this.renderField(field, index, prefix, prefixFunc));
+  renderChildren = (children, prefix, prefixFunc) => children.map((field, index) => this.renderField(field, index, prefix, prefixFunc));
 
   render() {
     const { prefix, prefixFunc } = this.props;
-    const { fields } = this.state
-    return this.renderFields(fields, getPath(prefix, undefined, undefined, prefixFunc), prefixFunc);
+    const { children } = this.state
+    return this.renderChildren(children, getPath(prefix, undefined, undefined, prefixFunc), prefixFunc);
   }
 }))
 

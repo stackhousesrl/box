@@ -3,7 +3,7 @@ export default [
     type: 'row',
     justify: 'start',
     gutter: 12,
-    fields: [
+    children: [
       {
         col: 12,
         type: 'button',

@@ -7,7 +7,7 @@ export default [
     type: 'row',
     flex: true,
     gutter: 12,
-    fields: [
+    children: [
       {
         col: 18,
         id: 'ricerca',
@@ -27,7 +27,7 @@ export default [
         col: 24,
         type: 'row',
         gutter: 12,
-        fields: [
+        children: [
           {
             col: 6,
             id: 'dataa',
@@ -82,7 +82,7 @@ export default [
         type: 'row',
         justify: 'start',
         gutter: 12,
-        fields: [
+        children: [
           {
             col: 12,
             type: 'button',

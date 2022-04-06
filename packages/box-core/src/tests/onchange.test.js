@@ -17,7 +17,7 @@ Box.setControls({
   Container
 })
 
-describe('Test fields update onChange', () => {
+describe('Test children update onChange', () => {
   let store;
 
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe('Test fields update onChange', () => {
 
   it('Quando passo un valore ad un input valido, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         type: 'Input',
         id: 'surname',
@@ -43,7 +43,7 @@ describe('Test fields update onChange', () => {
     const wrapper = mount(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -57,7 +57,7 @@ describe('Test fields update onChange', () => {
 
   it('Quando passo un valore ad un input valido complesso e un valore di default, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         type: 'Input',
         id: 'a.b.c.surname',
@@ -75,7 +75,7 @@ describe('Test fields update onChange', () => {
     const wrapper = mount(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -102,7 +102,7 @@ describe('Test fields update onChange', () => {
 
   it('Quando passo un valore ad un input obbligatorio, mi aspetto che sia validato (^isValid)', () => {
 
-    const fields = [
+    const children = [
       {
         type: 'Input',
         id: 'surname',
@@ -123,7 +123,7 @@ describe('Test fields update onChange', () => {
     const wrapper = mount(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -138,7 +138,7 @@ describe('Test fields update onChange', () => {
 
   it('Quando non passo un valore ad un input obbligatorio, mi aspetto che non sia valido (^isValid)', () => {
 
-    const fields = [
+    const children = [
       {
         type: 'Input',
         id: 'surname',
@@ -164,7 +164,7 @@ describe('Test fields update onChange', () => {
     const wrapper = mount(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );

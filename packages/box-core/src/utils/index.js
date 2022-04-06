@@ -20,16 +20,16 @@ export const select = () => (state, name) => {
   return isImmutable(state) ? _get(state.get(reducer), rest) : _get(state, name)
 };
 
-export const getPath = (prefix, prefixFieldsId, id, prefixFunc) => {
+export const getPath = (prefix, prefixChildrenId, id, prefixFunc) => {
   const {
     prefix: prefixValue,
-    prefixFieldsId: prefixFieldsIdValue,
+    prefixChildrenId: prefixChildrenIdValue,
     id: idValue
-  } = prefixFunc ? prefixFunc(prefix, prefixFieldsId, id) : { prefix, prefixFieldsId, id }
+  } = prefixFunc ? prefixFunc(prefix, prefixChildrenId, id) : { prefix, prefixChildrenId, id }
   
   const res = [
     ...(prefixValue || '').split('.'),
-    ...(prefixFieldsIdValue || '').split('.'),
+    ...(prefixChildrenIdValue || '').split('.'),
     ...(idValue || '').split('.'),
   ].filter(Boolean);
 
@@ -41,25 +41,25 @@ export const getPath = (prefix, prefixFieldsId, id, prefixFunc) => {
     return cleanPathHash(idValue, prefixValue);
   }
 
-  if ((prefixFieldsIdValue || '').indexOf('^') === 0) {
-    return cleanPath(prefixFieldsIdValue);
+  if ((prefixChildrenIdValue || '').indexOf('^') === 0) {
+    return cleanPath(prefixChildrenIdValue);
   }
 
-  if ((prefixFieldsIdValue || '').indexOf('#') === 0) {
-    return cleanPathHash(prefixFieldsIdValue, prefixValue);
+  if ((prefixChildrenIdValue || '').indexOf('#') === 0) {
+    return cleanPathHash(prefixChildrenIdValue, prefixValue);
   }
 
   return res.join('.');
 };
 
-export const containerFields = fields => {
-  if (!fields) return null;
+export const containerChildren = children => {
+  if (!children) return null;
   // eslint-disable-next-line no-unused-vars
-  return Object.entries(forceArray(fields)).reduce((acc, [key, field]) => {
-    const childFields = containerFields(field.fields);
+  return Object.entries(forceArray(children)).reduce((acc, [key, field]) => {
+    const childChildren = containerChildren(field.children);
     const nextField = {
       ..._omit(field, 'container'),
-      fields: childFields,
+      children: childChildren,
       type: field.type || EmptyContainer
     };
     if (field.container) {
@@ -68,7 +68,7 @@ export const containerFields = fields => {
         typeof field.container === 'string'
           ? { type: field.container }
           : isReactCmp ? { type: field.container } : field.container;
-      return [...acc, { ...node, fields: [nextField] }];
+      return [...acc, { ...node, children: [nextField] }];
     }
     return [...acc, nextField];
   }, []);

@@ -3,7 +3,7 @@ import { Component } from 'react'
 declare module '@stackhouseos/box-core' {
     export type BoxProps = {
         prefix: string;
-        fields: BoxField | BoxField[];
+        children: BoxField | BoxField[];
         destroyValue?: boolean
     }
     

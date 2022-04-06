@@ -174,7 +174,7 @@ class BoxField extends PureComponent {
       rules,
       ruleModeDisable,
       type,
-      fields,
+      children,
       customSelectorId,
       customSelectorFromId,
       saveOnState,

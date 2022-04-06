@@ -17,7 +17,7 @@ const model = [
   },
   {
     type: 'paper',
-    fields: [
+    children: [
       {
         type: 'input',
         id: '#indirizzo',
@@ -30,7 +30,7 @@ const model = [
     type: 'paper',
     bg: '#cc0',
     prefix: 'data',
-    item_fields: [
+    item_children: [
       {
         type: 'text',
         text: 'citta'
@@ -42,7 +42,7 @@ const model = [
       },
       {
         type: 'paper',
-        item_fields: [
+        item_children: [
           {
             type: 'text',
             id: 'citta'
@@ -69,7 +69,7 @@ const model = [
   /* {
     type: 'paper',
     prefix: 'dati',
-    fields: [
+    children: [
       {
         type: ({ value }) => <div>[{value}]</div>,
         color: 'gray',
@@ -266,7 +266,7 @@ function App() {
   return (
     <div className="App">
       <BoxContextProvider value={{ showErrors, app: { name: 'ZUCCA' } }}>
-        <Box prefix="global" fields={model} ref={ref} />
+        <Box prefix="global" children={model} ref={ref} />
       </BoxContextProvider>
       <button onClick={() => {
         setShowErrors(true)
@@ -274,7 +274,7 @@ function App() {
       }}>SHOW ERRORS</button>
       {/*       <br />
       <BoxContextProvider value={{ app: 'gino' }}>
-        <Box prefix="news" fields={modelNews} />
+        <Box prefix="news" children={modelNews} />
       </BoxContextProvider> */}
     </div>
   );

@@ -17,7 +17,7 @@ Box.setControls({
   Container
 })
 
-describe('Test fields', () => {
+describe('Test children', () => {
   let store;
 
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('Test fields', () => {
 
   it('Quando passo un field valido, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         type: 'Text',
         text: 'andrea'
@@ -38,7 +38,7 @@ describe('Test fields', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -49,7 +49,7 @@ describe('Test fields', () => {
 
   it('Quando passo un field non valido, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         type: 'TextNO',
         text: 'andrea'
@@ -58,7 +58,7 @@ describe('Test fields', () => {
 
     const wrapper = render(
       <Provider store={store}>
-        <Box fields={fields} prefix="app" />
+        <Box children={children} prefix="app" />
       </Provider>
     );
 
@@ -66,9 +66,9 @@ describe('Test fields', () => {
 
   })
 
-  it('Quando passo due fields valido, mi aspetto il render dell\'elemento correttamente', () => {
+  it('Quando passo due children valido, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         type: 'Text',
         text: 'andrea'
@@ -82,7 +82,7 @@ describe('Test fields', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -90,9 +90,9 @@ describe('Test fields', () => {
     expect(wrapper.html()).toEqual(`<h1>andrea</h1><h1>carla</h1>`)
   })
 
-  it('Quando passo fields validi nested, mi aspetto il render dell\'elemento correttamente', () => {
+  it('Quando passo children validi nested, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         container: 'Container',
         type: 'Text',
@@ -100,7 +100,7 @@ describe('Test fields', () => {
       },
       {
         type: 'Container',
-        fields: [{
+        children: [{
           type: 'Text',
           text: 'carla'
         }]
@@ -110,7 +110,7 @@ describe('Test fields', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -134,7 +134,7 @@ describe('Test value by id', () => {
 
   it('Quando passo un field valido, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         type: 'Text',
         id: 'name'
@@ -144,7 +144,7 @@ describe('Test value by id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -153,9 +153,9 @@ describe('Test value by id', () => {
 
   })
 
-  it('Quando passo due fields valido, mi aspetto il render dell\'elemento correttamente', () => {
+  it('Quando passo due children valido, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         type: 'Text',
         id: 'name'
@@ -169,7 +169,7 @@ describe('Test value by id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -177,9 +177,9 @@ describe('Test value by id', () => {
     expect(wrapper.html()).toEqual(`<h1>andrea</h1><h1>carla</h1>`)
   })
 
-  it('Quando passo fields validi nested, mi aspetto il render dell\'elemento correttamente', () => {
+  it('Quando passo children validi nested, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         container: 'Container',
         type: 'Text',
@@ -187,7 +187,7 @@ describe('Test value by id', () => {
       },
       {
         type: 'Container',
-        fields: [{
+        children: [{
           type: 'Text',
           id: 'secondName'
         }]
@@ -197,7 +197,7 @@ describe('Test value by id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -230,7 +230,7 @@ describe('Test value by root id', () => {
 
   it('Quando passo un field valido, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         type: 'Text',
         id: 'name'
@@ -240,7 +240,7 @@ describe('Test value by root id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -249,9 +249,9 @@ describe('Test value by root id', () => {
 
   })
 
-  it('Quando passo due fields valido, mi aspetto il render dell\'elemento correttamente', () => {
+  it('Quando passo due children valido, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         type: 'Text',
         id: 'name'
@@ -265,7 +265,7 @@ describe('Test value by root id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -273,9 +273,9 @@ describe('Test value by root id', () => {
     expect(wrapper.html()).toEqual(`<h1>andrea</h1><h1>carla</h1>`)
   })
 
-  it('Quando passo fields validi nested, mi aspetto il render dell\'elemento correttamente', () => {
+  it('Quando passo children validi nested, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         container: 'Container',
         type: 'Text',
@@ -283,7 +283,7 @@ describe('Test value by root id', () => {
       },
       {
         type: 'Container',
-        fields: [
+        children: [
           {
             type: 'Text',
             id: '^app2.secondName'
@@ -295,7 +295,7 @@ describe('Test value by root id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app" />
+          <Box children={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -303,9 +303,9 @@ describe('Test value by root id', () => {
     expect(wrapper.html()).toEqual(`<div><h1>andrea</h1></div><div><h1>carla</h1></div>`)
   })
 
-  it('Quando passo fields validi nested con prefix nei nodi, mi aspetto il render dell\'elemento correttamente', () => {
+  it('Quando passo children validi nested con prefix nei nodi, mi aspetto il render dell\'elemento correttamente', () => {
 
-    const fields = [
+    const children = [
       {
         container: 'Container',
         type: 'Text',
@@ -314,11 +314,11 @@ describe('Test value by root id', () => {
       {
         type: 'Container',
         prefix: 'data',
-        fields: [
+        children: [
           {
             type: 'Container',
             prefix: 'valore',
-            fields: [
+            children: [
               {
                 type: 'Text',
                 id: 'secondName'
@@ -332,7 +332,7 @@ describe('Test value by root id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box fields={fields} prefix="app3" />
+          <Box children={children} prefix="app3" />
         </div>
       </Provider>
     );

@@ -1,6 +1,6 @@
 {
   "name": "@stackhouseos/box-core",
-  "version": "4.7.0",
+  "version": "5.0.0@beta",
   "description": "Json generator layout",
   "repository": {
     "type": "git",

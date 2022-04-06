@@ -42,7 +42,7 @@ const model = [{
   id: 'name'
 }]
 
-<Box prefix="nomereducer" fields={model} />
+<Box prefix="nomereducer" children={model} />
 
 ```
 
@@ -69,7 +69,7 @@ const model = [
   }
 ]
 
-<Box prefix="nomereducer" fields={model} />
+<Box prefix="nomereducer" children={model} />
 
 ```
 
@@ -85,7 +85,7 @@ Esempio
 ### Box
 | Prop Name    | Type           | Is Required | Default Value | Description                                                                                                                                                                          |
 |--------------|----------------|-------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| fields       | `array|object` | yes         |               | Schema del modello da visualizzare                                                                                                                                                   |
+| children       | `array|object` | yes         |               | Schema del modello da visualizzare                                                                                                                                                   |
 | prefix       | `string`       | yes         |               | Path (dotStyle) è il nome del reducer in cui salvare e leggere i dati, es. tickets.detail                                                                                            |
 | destroyValue | `bool`         | optional    | false         | Regola di default per tutti i field del modello, se true svuota il dato se il componente viene distrutto, utile quando ci sono le regole, si evita di lasciare dati sporchi nel form |
 
@@ -96,8 +96,8 @@ Esempio
 | type            | `string|component`               | optional                | `div`         | Componente da visualizzare                                                                                                                                                                                                     |
 | id              | `string|reselect`                         | optional                |               | redux path selector per leggere o salvare i dati                                                                                                                                                                               |
 | (*_)fromId      | `string|reselect`                | optional                |               | permette di leggere i dati da un selettore diverso da id, in quetso caso id viene utilizzato solo per salvare, utile quando si usano le select, che devono salvare su id ma prendere i dati da un'altro selettore, name_fromId |
-| fields          | `array|object`                   | optional                |               | Recursive fields                                                                                                                                                                                                               |
-| *_fields          | `array|object`                   | optional                |               | Recursive fields                                                                                                                                                                                                               |
+| children          | `array|object`                   | optional                |               | Recursive children                                                                                                                                                                                                               |
+| *_children          | `array|object`                   | optional                |               | Recursive children                                                                                                                                                                                                               |
 | onChange        | `string|func({value, dispatch})` | optional, `id` required |               | Viene scatenata ad ogni aggiornamento dell'id corrispondente, se viene usata una stringa deve corrispondere ad una azione di redux                                                                                             |
 | onLoad          | `string|func({value, dispatch})` | optional,`id` required  |               | Viene scatenata ad mount del compomente, se viene usata una stringa deve corrispondere ad una azione di redux                                                                                                                  |
 | prefix          | `string`                         | optional                |               | Path (dotStyle) aggiunge un prefisso a tutti gli id successivi                                                                                                                                                                 |
@@ -125,7 +125,7 @@ I tuoi componenti custom riceveranno in automatico le seguenti props, oltre al t
 | disabled  | `bool`   | in base alla rules                                                      |
 | error     | `string` | in base a validation                                                    |
 | onBlur    | `func`   | Necessario per attivare la validazione degli input                               |
-| renderFields    | `func`   | Utile per renderizzare nuovi componenti nello stesso contesto di validazione                               |
+| renderChildren    | `func`   | Utile per renderizzare nuovi componenti nello stesso contesto di validazione                               |
 
 
 ## Id
@@ -146,7 +146,7 @@ const model = [
   }
 ]
 
-<Box prefix="nomereducer" fields={model} />
+<Box prefix="nomereducer" children={model} />
 ```
 
 i dati potranno essere recuperati usando come id direttamente name, Box salverà i dati su redux nel reducer `nomereducer.name` e `nomereducer.dettagli.tipologia`
@@ -180,7 +180,7 @@ const model = [
 ]
 
 <BoxContextProvider value={{ role: 'user' }}>
-  <Box prefix="ticket" fields={model} />
+  <Box prefix="ticket" children={model} />
 </BoxContextProvider>
 ```
 
@@ -226,7 +226,7 @@ const model = [
 ]
 
 <BoxContextProvider value={{ role: 'user' }}>
-  <Box prefix="ticket" fields={model} />
+  <Box prefix="ticket" children={model} />
 </BoxContextProvider>
 ```
 
@@ -280,8 +280,8 @@ E' possibile aggiungere un prefisso a livello di componente
 
 `<Box prefix="nomereducer" />` 
 
-oppure dentro un qualsiasi fields.
-Aggiungendo un prefisso al padre sarà aggiunto in automatico a tutti i fields figli.
+oppure dentro un qualsiasi children.
+Aggiungendo un prefisso al padre sarà aggiunto in automatico a tutti i children figli.
 
 ```JS
 const modello = [
@@ -292,7 +292,7 @@ const modello = [
   {
     type: 'grid',
     prefix: 'dati',
-    fields:[
+    children:[
       {
         id: 'name' // selector nomereducer.dati.name
       },
@@ -303,18 +303,18 @@ const modello = [
   }
 ]
 
-<Box prefix="nomereducer" fields={modello} />
+<Box prefix="nomereducer" children={modello} />
 ```
 
 ### Container
-Capiterà molto spesso di dover mettere attorno ai tuoi fields un componente di layout, questa operazione si potrà fare in 2 modi:
+Capiterà molto spesso di dover mettere attorno ai tuoi children un componente di layout, questa operazione si potrà fare in 2 modi:
 
 • Modalità normale
 
 ```JS
   const model = [{
     type: 'Paper',
-    fields:[{type: 'text', text: 'ciao'}]
+    children:[{type: 'text', text: 'ciao'}]
   }]
   // esempio da compilato
   <Paper>
@@ -355,7 +355,7 @@ Passare al context il campo showErrors: true, per visualizzare tutti gli errori
 
 ```JS
 <BoxContextProvider value={{ showErrors: true }}>
-  <Box prefix="ticket" fields={model} />
+  <Box prefix="ticket" children={model} />
 </BoxContextProvider>
 ```
 

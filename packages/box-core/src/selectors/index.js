@@ -38,12 +38,12 @@ const transformPrefix = (key, prefix) => {
 export const chooseSelectorGlobalErrors = createSelector(
   getStateData,
   (state, extraData) => extraData,
-  (state, b, c, fields) => fields,
+  (state, b, c, children) => children,
   (state, b, c, d, prefix) => prefix,
   (state, b, c, d, p, checkAll) => checkAll,
-  (data, extraData, fields, prefix, checkAll) => {
-    if (Object.keys(fields).length === 0) return { hasError: false }
-    const validation = generateValidationsObject(Object.entries(fields).filter(([k, v]) => !!v).map(([key, val]) => Object.assign({}, val, {
+  (data, extraData, children, prefix, checkAll) => {
+    if (Object.keys(children).length === 0) return { hasError: false }
+    const validation = generateValidationsObject(Object.entries(children).filter(([k, v]) => !!v).map(([key, val]) => Object.assign({}, val, {
       id: transformPrefix(key, prefix)
     })));
     const [hasError, results] = checkRules(validation, Object.assign({}, data, extraData), false, { prefix, checkAll })
@@ -55,9 +55,9 @@ export const selectorRulesDisabled = createSelector(
   getStateData,
   (state, extraData) => extraData,
   (a, b, rules) => rules,
-  (a, b, rules, fields, prefix) => prefix,
+  (a, b, rules, children, prefix) => prefix,
   chooseSelectorGlobalErrors,
-  (a, b, rules, fields, prefix, showAll, fieldId) => fieldId,
+  (a, b, rules, children, prefix, showAll, fieldId) => fieldId,
   (state, extraData, rules, prefix, hasGloablError, fieldId) => {
     const data = Object.assign({}, state, extraData, { hasError: hasGloablError.hasError, isValid: !hasGloablError.hasError, fieldId })
     const r = _isFunction(rules) ? rules(data) : rules;
@@ -101,8 +101,8 @@ function mapKeysDeepLodash(obj, cb, isRecursive) {
   );
 };
 
-const generateValidationsObject = (fields) => {
-  return fields.filter((e) => e.id && (e.pattern || e.required || e.validate))
+const generateValidationsObject = (children) => {
+  return children.filter((e) => e.id && (e.pattern || e.required || e.validate))
     .map((inc) => ({
       and: [
         inc.validate && mapKeysDeepLodash(inc.validate, (v, key) => key === "self" ? inc.id : key),
