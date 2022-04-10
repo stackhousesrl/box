@@ -18,7 +18,7 @@ declare module '@stackhouseos/box-core' {
     }
 ​
     export default class Box extends Component<BoxProps> {
-        static extendComponents ( components: {}): Component
+        static registerComponents ( components: {}): Component
     }
 ​
     export const createBoxInstance: () => typeof Box;

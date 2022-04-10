@@ -103,7 +103,7 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     return Box.Components[type];
   }
 
-  static extendComponents(components) {
+  static registerComponents(components) {
     Box.Components = Object.assign({}, Box.Components, components);
     return Box;
   }
@@ -174,7 +174,7 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     return _children
   }
 
-  renderField = (field, index, prefix, prefixFunc) => {
+  renderChild = (field, index, prefix, prefixFunc) => {
     const { destroyValue } = this.props
     const {
       type,
@@ -219,7 +219,7 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     )
   };
 
-  renderChildren = (children, prefix, prefixFunc) => children.map((field, index) => this.renderField(field, index, prefix, prefixFunc));
+  renderChildren = (children, prefix, prefixFunc) => children.map((field, index) => this.renderChild(field, index, prefix, prefixFunc));
 
   render() {
     const { prefix, prefixFunc } = this.props;
