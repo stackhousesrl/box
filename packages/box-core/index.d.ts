@@ -3,13 +3,14 @@ import { Component } from 'react'
 declare module '@stackhouseos/box-core' {
     export type BoxProps = {
         prefix: string;
-        children: BoxField | BoxField[];
+        data: BoxField | BoxField[];
         destroyValue?: boolean
     }
     
     export type BoxField = Partial<BoxProps> & {
         type:string;
         rules?: {} | [];
+        children?: BoxField[],
         validate?: {};
         id?: string;
         container?: BoxField | string;
@@ -17,7 +18,7 @@ declare module '@stackhouseos/box-core' {
     }
 ​
     export default class Box extends Component<BoxProps> {
-        static extendControls ( controls: {}): Component
+        static extendComponents ( components: {}): Component
     }
 ​
     export const createBoxInstance: () => typeof Box;

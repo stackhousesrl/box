@@ -4,20 +4,20 @@ import PropTypes from 'prop-types';
 import moize from 'moize'
 import { connect, ReactReduxContext } from 'react-redux';
 import _get from 'lodash/get';
-import { sortWithOrder, getPath, containerChildren, cleanPath } from '../../utils';
+import { getPath, containerChildren, cleanPath } from '../../utils';
 import EmptyContainer from '../empty';
 import { actionUpdate } from '../../actions';
 import { withBoxContext } from '../../context';
 import WrapperField from './wrapper-field';
 import { chooseSelectorGlobalErrors } from '../../selectors';
 
-const Controls = {};
+const Components = {};
 
 export const createBoxInstance = () => connect(null, null, null, { forwardRef: true })(withBoxContext(class Box extends PureComponent {
   static contextType = ReactReduxContext;
 
   static defaultProps = {
-    children: [],
+    data: [],
   };
 
   static propTypes = {
@@ -25,16 +25,15 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     destroyValue: PropTypes.bool,
     ruleModeDisable: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
-    /* Form children */
-    children: PropTypes.array.isRequired,
+    data: PropTypes.array.isRequired,
     /* Function called when form value changes */
     onChange: PropTypes.func,
   };
 
   constructor(props) {
     super();
-    const { DefaultControl, defaultType } = props
-    const children = containerChildren(props.children);
+    const { DefaultComponent, defaultType } = props
+    const children = containerChildren(props.data);
     this.state = { flatIds: {}, children };
 
     const fn = id => (field, cb) => {
@@ -86,36 +85,36 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
         cb()
     }
 
-    const finalFallbackControl = (DefaultControl || EmptyContainer)
+    const finalFallbackComponent = (DefaultComponent || EmptyContainer)
 
-    const fnControl = type => {
+    const fnComponent = type => {
       return typeof type === 'string'
-        ? Box.getControl(type) || Box.getControl(defaultType) || finalFallbackControl
-        : type || finalFallbackControl
+        ? Box.getComponent(type) || Box.getComponent(defaultType) || finalFallbackComponent
+        : type || finalFallbackComponent
     }
 
     this.setFlatIdsMemoized = moize(fn) // usato per la validazione
-    this.getControlMemoized = moize(fnControl)
+    this.getComponentMemoized = moize(fnComponent)
   }
 
-  static Controls = Controls;
+  static Components = Components;
 
-  static getControl(type) {
-    return Box.Controls[type];
+  static getComponent(type) {
+    return Box.Components[type];
   }
 
-  static extendControls(controls) {
-    Box.Controls = Object.assign({}, Box.Controls, controls);
+  static extendComponents(components) {
+    Box.Components = Object.assign({}, Box.Components, components);
     return Box;
   }
 
-  static setControls(controls) {
-    Box.Controls = controls;
+  static setComponents(components) {
+    Box.Components = components;
     return Box;
   }
 
-  static setControl(type, Control) {
-    Box.Controls = Object.assign({}, Box.Controls, { [type]: Control });
+  static setComponent(type, Component) {
+    Box.Components = Object.assign({}, Box.Components, { [type]: Component });
     return Box;
   }
 
@@ -128,8 +127,8 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.children !== this.props.children) {
-      const children = containerChildren(this.props.children);
+    if (prevProps.data !== this.props.data) {
+      const children = containerChildren(this.props.data);
       this.setState({ children })
     }
   }
@@ -156,7 +155,7 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
   }
 
   get commonProps() {
-    const { DefaultControl, defaultType, children, sort, staticContext, ...commonProps } = this.props;
+    const { DefaultComponent, defaultType, data, sort, staticContext, ...commonProps } = this.props;
     return commonProps;
   }
 
@@ -184,9 +183,9 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
       prefix: prefixChildrenId,
     } = field;
 
-    const Control = this.getControlMemoized(type)
+    const Component = this.getComponentMemoized(type)
 
-    if (!Control) {
+    if (!Component) {
       console.warn('Missing', type)
       return null
     }
@@ -210,7 +209,7 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
         setFlatId={this.setFlatIdsMemoized(fieldId)}
         reducer={reducer}
         selector={selector.join('.')}
-        Control={Control}
+        Component={Component}
         fieldType={typeof type === 'string' ? type : 'Class'}
         onChange={this.onChange}
         renderChildren={this.renderChildren}

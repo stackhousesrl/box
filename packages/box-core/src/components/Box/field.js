@@ -157,7 +157,7 @@ class BoxField extends PureComponent {
 
   render() {
     const {
-      Control,
+      Component,
       field,
       match,
       dispatch,
@@ -184,7 +184,7 @@ class BoxField extends PureComponent {
     const actions = restField.action && { onAction: this.onAction }
 
     return (
-      <Control
+      <Component
         {...restField}
         {...props}
         {...actions}

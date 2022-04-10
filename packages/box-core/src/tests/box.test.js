@@ -11,7 +11,7 @@ const Text = ({ text, value }) => <h1>{text || value}</h1>
 const Input = ({ onChange, value, name }) => <input name={name} value={value} onChange={evt => onChange(evt.target.value)} />
 const Container = ({ children }) => <div>{children}</div>
 
-Box.setControls({
+Box.setComponents({
   Input,
   Text,
   Container
@@ -38,7 +38,7 @@ describe('Test children', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -58,7 +58,7 @@ describe('Test children', () => {
 
     const wrapper = render(
       <Provider store={store}>
-        <Box children={children} prefix="app" />
+        <Box data={children} prefix="app" />
       </Provider>
     );
 
@@ -82,7 +82,7 @@ describe('Test children', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -110,7 +110,7 @@ describe('Test children', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -144,7 +144,7 @@ describe('Test value by id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -169,7 +169,7 @@ describe('Test value by id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -197,7 +197,7 @@ describe('Test value by id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -240,7 +240,7 @@ describe('Test value by root id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -265,7 +265,7 @@ describe('Test value by root id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -295,7 +295,7 @@ describe('Test value by root id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -332,7 +332,7 @@ describe('Test value by root id', () => {
     const wrapper = render(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app3" />
+          <Box data={children} prefix="app3" />
         </div>
       </Provider>
     );

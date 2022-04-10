@@ -11,7 +11,7 @@ const Text = ({ text, value }) => <h1>{text || value}</h1>
 const Input = ({ onChange, value = '', name }) => <input name={name} value={value} onChange={evt => onChange(evt.target.value)} />
 const Container = ({ children }) => <div>{children}</div>
 
-Box.setControls({
+Box.setComponents({
   Input,
   Text,
   Container
@@ -43,7 +43,7 @@ describe('Test children update onChange', () => {
     const wrapper = mount(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -75,7 +75,7 @@ describe('Test children update onChange', () => {
     const wrapper = mount(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -123,7 +123,7 @@ describe('Test children update onChange', () => {
     const wrapper = mount(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );
@@ -164,7 +164,7 @@ describe('Test children update onChange', () => {
     const wrapper = mount(
       <Provider store={store}>
         <div>
-          <Box children={children} prefix="app" />
+          <Box data={children} prefix="app" />
         </div>
       </Provider>
     );

@@ -12,7 +12,7 @@ import configureStore from './store';
 
 const { store } = configureStore({});
 
-Box.extendControls({
+Box.extendComponents({
   input: ({ onChange, value = '', error, onBlur }) => {
     return (
       <div style={{ border: '1px solid', borderColor: error ? 'red' : 'gray', padding: 5 }}>

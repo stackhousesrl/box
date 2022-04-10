@@ -42,7 +42,7 @@ const model = [{
   id: 'name'
 }]
 
-<Box prefix="nomereducer" children={model} />
+<Box prefix="nomereducer" data={model} />
 
 ```
 
@@ -59,7 +59,7 @@ const CustomInput = ({onChange, value, placeholder}) => {
   )
 }
 
-Box.extendControls({CustomInput});
+Box.extendComponents({CustomInput});
 
 const model = [
   {
@@ -69,7 +69,7 @@ const model = [
   }
 ]
 
-<Box prefix="nomereducer" children={model} />
+<Box prefix="nomereducer" data={model} />
 
 ```
 
@@ -85,7 +85,7 @@ Esempio
 ### Box
 | Prop Name    | Type           | Is Required | Default Value | Description                                                                                                                                                                          |
 |--------------|----------------|-------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| children       | `array|object` | yes         |               | Schema del modello da visualizzare                                                                                                                                                   |
+| children       | `array` | no         |               | Schema del modello da visualizzare                                                                                                                                                   |
 | prefix       | `string`       | yes         |               | Path (dotStyle) è il nome del reducer in cui salvare e leggere i dati, es. tickets.detail                                                                                            |
 | destroyValue | `bool`         | optional    | false         | Regola di default per tutti i field del modello, se true svuota il dato se il componente viene distrutto, utile quando ci sono le regole, si evita di lasciare dati sporchi nel form |
 
@@ -95,9 +95,9 @@ Esempio
 |-----------------|----------------------------------|-------------------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | type            | `string|component`               | optional                | `div`         | Componente da visualizzare                                                                                                                                                                                                     |
 | id              | `string|reselect`                         | optional                |               | redux path selector per leggere o salvare i dati                                                                                                                                                                               |
-| (*_)fromId      | `string|reselect`                | optional                |               | permette di leggere i dati da un selettore diverso da id, in quetso caso id viene utilizzato solo per salvare, utile quando si usano le select, che devono salvare su id ma prendere i dati da un'altro selettore, name_fromId |
-| children          | `array|object`                   | optional                |               | Recursive children                                                                                                                                                                                                               |
-| *_children          | `array|object`                   | optional                |               | Recursive children                                                                                                                                                                                                               |
+| (*)_fromId      | `string|reselect`                | optional                |               | permette di leggere i dati da un selettore diverso da id, in quetso caso id viene utilizzato solo per salvare, utile quando si usano le select, che devono salvare su id ma prendere i dati da un'altro selettore, name_fromId |
+| children          | `array`                   | optional                |               | Recursive children                                                                                                                                                                                                               |
+| *_children          | `array`                   | optional                |               | Recursive children                                                                                                                                                                                                               |
 | onChange        | `string|func({value, dispatch})` | optional, `id` required |               | Viene scatenata ad ogni aggiornamento dell'id corrispondente, se viene usata una stringa deve corrispondere ad una azione di redux                                                                                             |
 | onLoad          | `string|func({value, dispatch})` | optional,`id` required  |               | Viene scatenata ad mount del compomente, se viene usata una stringa deve corrispondere ad una azione di redux                                                                                                                  |
 | prefix          | `string`                         | optional                |               | Path (dotStyle) aggiunge un prefisso a tutti gli id successivi                                                                                                                                                                 |
@@ -146,7 +146,7 @@ const model = [
   }
 ]
 
-<Box prefix="nomereducer" children={model} />
+<Box prefix="nomereducer" data={model} />
 ```
 
 i dati potranno essere recuperati usando come id direttamente name, Box salverà i dati su redux nel reducer `nomereducer.name` e `nomereducer.dettagli.tipologia`
@@ -180,7 +180,7 @@ const model = [
 ]
 
 <BoxContextProvider value={{ role: 'user' }}>
-  <Box prefix="ticket" children={model} />
+  <Box prefix="ticket" data={model} />
 </BoxContextProvider>
 ```
 
@@ -206,12 +206,12 @@ const model = [
 
 • Add components
 ```JS
-Box.extendControls({ ...components });
+Box.extendComponents({ ...components });
 ```
 
 • Set components
 ```JS
-Box.setControls({ ...onlyThiscomponents });
+Box.setComponents({ ...onlyThiscomponents });
 ```
 
 • Extends data with Context, per aggiungere dati che non sono su redux
@@ -226,7 +226,7 @@ const model = [
 ]
 
 <BoxContextProvider value={{ role: 'user' }}>
-  <Box prefix="ticket" children={model} />
+  <Box prefix="ticket" data={model} />
 </BoxContextProvider>
 ```
 
@@ -303,7 +303,7 @@ const modello = [
   }
 ]
 
-<Box prefix="nomereducer" children={modello} />
+<Box prefix="nomereducer" data={modello} />
 ```
 
 ### Container
@@ -355,7 +355,7 @@ Passare al context il campo showErrors: true, per visualizzare tutti gli errori
 
 ```JS
 <BoxContextProvider value={{ showErrors: true }}>
-  <Box prefix="ticket" children={model} />
+  <Box prefix="ticket" data={model} />
 </BoxContextProvider>
 ```
 

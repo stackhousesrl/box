@@ -266,7 +266,7 @@ function App() {
   return (
     <div className="App">
       <BoxContextProvider value={{ showErrors, app: { name: 'ZUCCA' } }}>
-        <Box prefix="global" children={model} ref={ref} />
+        <Box prefix="global" data={model} ref={ref} />
       </BoxContextProvider>
       <button onClick={() => {
         setShowErrors(true)
@@ -274,7 +274,7 @@ function App() {
       }}>SHOW ERRORS</button>
       {/*       <br />
       <BoxContextProvider value={{ app: 'gino' }}>
-        <Box prefix="news" children={modelNews} />
+        <Box prefix="news" data={modelNews} />
       </BoxContextProvider> */}
     </div>
   );
