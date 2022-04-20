@@ -29,10 +29,10 @@ class WrapperChild extends PureComponent {
 }
 
 const makeMapStateToProps = (state, props) => {
-  const { prefix, child, contextProps, flatIds, disableRules, childrenId } = props;
+  const { prefix, child, contextProps, flatIds, disableRules, childId } = props;
   const { rules } = child;
   return {
-    disabled: !disableRules && rules && selectorRulesDisabled(state, contextProps, rules, flatIds, prefix, false, childrenId),
+    disabled: !disableRules && rules && selectorRulesDisabled(state, contextProps, rules, flatIds, prefix, false, childId),
     flatIds: undefined
   };
 };

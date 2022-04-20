@@ -236,7 +236,7 @@ const model = [
 |-----------|--------|--------------------------------------------------------------------------|
 | ^hasError | `bool` | E' presente un errore nel form, vengono analizzati solo i child visibili |
 | ^isValid | `bool`  | Il form è valido, vengono analizzati solo i child visibili |
-| ^childrenId | `string`  | Valore della chiave |
+| ^childId | `string`  | Valore della chiave |
 
 Utile quando si vuole disabilitare il tasto salva se nel form sono presenti errori
 

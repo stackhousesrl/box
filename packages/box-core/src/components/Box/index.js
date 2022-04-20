@@ -192,21 +192,21 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
 
     const getId = typeof id === 'string' && id
 
-    const childrenId = getPath(prefix, prefixChildrenId, getId, prefixFunc);
-    const [reducer, ...selector] = childrenId.split('.');
+    const childId = getPath(prefix, prefixChildrenId, getId, prefixFunc);
+    const [reducer, ...selector] = childId.split('.');
 
     return (
       <WrapperChild
         {...this.commonProps}
-        {...this.nestedChildren(child, childrenId, prefixFunc)}
-        key={`${childrenId}-${index}`}
+        {...this.nestedChildren(child, childId, prefixFunc)}
+        key={`${childId}-${index}`}
         id={id}
         defaultDestroyValue={destroyValue}
         prefix={prefixFunc ? prefixFunc(prefix).prefix : prefix}
         child={child}
-        childrenId={childrenId}
+        childId={childId}
         flatIds={this.state.flatIds}
-        setFlatId={this.setFlatIdsMemoized(childrenId)}
+        setFlatId={this.setFlatIdsMemoized(childId)}
         reducer={reducer}
         selector={selector.join('.')}
         Component={Component}
@@ -214,7 +214,7 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
         onChange={this.onChange}
         renderChildren={this.renderChildren}
       >
-        {children && this.renderChildren(children, childrenId, prefixFunc)}
+        {children && this.renderChildren(children, childId, prefixFunc)}
       </WrapperChild>
     )
   };

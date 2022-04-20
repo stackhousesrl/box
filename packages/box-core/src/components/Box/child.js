@@ -68,11 +68,11 @@ class BoxChild extends PureComponent {
   }
 
   resetChild = () => {
-    const { id, child, onChange, childrenId, setFlatId, defaultDestroyValue } = this.props;
+    const { id, child, onChange, childId, setFlatId, defaultDestroyValue } = this.props;
     const { destroyValue = defaultDestroyValue } = child
     setFlatId(undefined, () => {
       if (destroyValue && id) {
-        onChange(childrenId, undefined, child);
+        onChange(childId, undefined, child);
       }
     })
   }
@@ -96,8 +96,8 @@ class BoxChild extends PureComponent {
   }
 
   onChange = value => {
-    const { child, onChange, childrenId } = this.props;
-    onChange(childrenId, value, child);
+    const { child, onChange, childId } = this.props;
+    onChange(childId, value, child);
     this.setState({ blur: false })
   }
 
@@ -106,10 +106,10 @@ class BoxChild extends PureComponent {
   }
 
   onAction = (paramsFromArgs) => {
-    const { valueId, childrenId, dispatch, child, id, contextProps } = this.props;
+    const { valueId, childId, dispatch, child, id, contextProps } = this.props;
     const { store } = this.context;
     const { action, params: paramsChild } = child;
-    const selectorId = getPath(valueId || childrenId);
+    const selectorId = getPath(valueId || childId);
 
     const [reducer, ...selector] = selectorId.split('.');
     const value = select()(store.getState(), selectorId);
@@ -118,7 +118,7 @@ class BoxChild extends PureComponent {
       if (action === '#reset') {
         return dispatch(actionResetData(reducer, selector.join('.')));
       }
-      const baseData = Object.assign({}, contextProps, { params: paramsChild || paramsFromArgs, value, id, child, childrenId, valueId, selectorId });
+      const baseData = Object.assign({}, contextProps, { params: paramsChild || paramsFromArgs, value, id, child, childId, valueId, selectorId });
       if (typeof action === 'string') return dispatch({ type: action, payload: baseData });
       else return action({ dispatch, payload: baseData });
     }
@@ -202,7 +202,7 @@ class BoxChild extends PureComponent {
 const makeMapStateToProps = (state, props) => {
   const {
     prefix,
-    childrenId,
+    childId,
     id,
     child,
     contextProps,
@@ -216,8 +216,8 @@ const makeMapStateToProps = (state, props) => {
   } = child;
 
   const makeSelectorId = customSelectorId || _isFunction(id)
-    ? (customSelectorId || id)(state, childrenId, child, contextProps)
-    : (id && chooseSelectorByNode(state, contextProps, childrenId, child))
+    ? (customSelectorId || id)(state, childId, child, contextProps)
+    : (id && chooseSelectorByNode(state, contextProps, childId, child))
 
   const child_rules = Object.keys(child).filter(e => e.indexOf('_rules') > 0)
   // fromId e customSelectorFromId, servono per la retrocompatibilità
@@ -250,7 +250,7 @@ const makeMapStateToProps = (state, props) => {
     const [childKey] = inc.split('_func');
     return Object.assign({}, acc,
       {
-        [childKey]: _get(child, inc)(value, state, contextProps, childrenId),
+        [childKey]: _get(child, inc)(value, state, contextProps, childId),
       })
   }, {});
 
@@ -266,7 +266,7 @@ const makeMapStateToProps = (state, props) => {
   };
 
   const { required, pattern, validate } = finalProps
-  const error = !disableErrors && childrenId && (pattern || required || validate) && chooseSelectorErrors(state, contextProps, childrenId, { pattern, required, validate }, prefix)
+  const error = !disableErrors && childId && (pattern || required || validate) && chooseSelectorErrors(state, contextProps, childId, { pattern, required, validate }, prefix)
 
   return {
     ...finalProps,

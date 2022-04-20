@@ -63,7 +63,7 @@ const model = [
     type: 'text',
     id: 'citta',
     rules: {
-      '^childrenId': { con: 'citta' }
+      '^childId': { con: 'citta' }
     }
   },
   /* {
