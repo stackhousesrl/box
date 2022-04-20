@@ -3,17 +3,17 @@ import { Component } from 'react'
 declare module '@stackhouseos/box-core' {
     export type BoxProps = {
         prefix: string;
-        data: BoxField | BoxField[];
+        data: BoxChild | BoxChild[];
         destroyValue?: boolean
     }
     
-    export type BoxField = Partial<BoxProps> & {
+    export type BoxChild = Partial<BoxProps> & {
         type:string;
         rules?: {} | [];
-        children?: BoxField[],
+        children?: BoxChild[],
         validate?: {};
         id?: string;
-        container?: BoxField | string;
+        container?: BoxChild | string;
         ruleModeDisable?: boolean;
     }
 ​

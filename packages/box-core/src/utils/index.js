@@ -55,22 +55,22 @@ export const getPath = (prefix, prefixChildrenId, id, prefixFunc) => {
 export const containerChildren = children => {
   if (!children) return null;
   // eslint-disable-next-line no-unused-vars
-  return Object.entries(forceArray(children)).reduce((acc, [key, field]) => {
-    const childChildren = containerChildren(field.children);
-    const nextField = {
-      ..._omit(field, 'container'),
+  return Object.entries(forceArray(children)).reduce((acc, [key, child]) => {
+    const childChildren = containerChildren(child.children);
+    const nextChild = {
+      ..._omit(child, 'container'),
       children: childChildren,
-      type: field.type || EmptyContainer
+      type: child.type || EmptyContainer
     };
-    if (field.container) {
-      const isReactCmp = Object.prototype.hasOwnProperty.call(field.container, '$$typeof')
+    if (child.container) {
+      const isReactCmp = Object.prototype.hasOwnProperty.call(child.container, '$$typeof')
       const node =
-        typeof field.container === 'string'
-          ? { type: field.container }
-          : isReactCmp ? { type: field.container } : field.container;
-      return [...acc, { ...node, children: [nextField] }];
+        typeof child.container === 'string'
+          ? { type: child.container }
+          : isReactCmp ? { type: child.container } : child.container;
+      return [...acc, { ...node, children: [nextChild] }];
     }
-    return [...acc, nextField];
+    return [...acc, nextChild];
   }, []);
 };
 

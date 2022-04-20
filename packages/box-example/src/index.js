@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { useDeferredValue } from 'react';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl'
 
@@ -12,7 +12,7 @@ import configureStore from './store';
 
 const { store } = configureStore({});
 
-Box.extendComponents({
+Box.registerComponents({
   input: ({ onChange, value = '', error, onBlur }) => {
     return (
       <div style={{ border: '1px solid', borderColor: error ? 'red' : 'gray', padding: 5 }}>
@@ -38,6 +38,7 @@ Box.extendComponents({
     </div>
   },
   paper: ({ children, bg = 'gray', item }) => {
+
     return (
       <div style={{ backgroundColor: bg, minHeight: 100, minWidth: 100, marginBottom: 10 }}>
         <div>{item}</div>
@@ -48,20 +49,22 @@ Box.extendComponents({
   },
   button: ({ title, disabled }) => {
     return <button disabled={disabled}>{title}</button>
+  },
+  LargeComponent: ({ value='' }) => {
+    const deferredValue = useDeferredValue(value);
+    return Array(1000).fill(1).map((r, i) => <div key={i}>{i + deferredValue}</div>)
   }
 })
 
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <IntlProvider>
       <App />
     </IntlProvider>
   </Provider>
-  ,
-  document.getElementById('root')
-);
+)
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// serviceWorker.unregister();

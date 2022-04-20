@@ -8,7 +8,7 @@ import { getPath, containerChildren, cleanPath } from '../../utils';
 import EmptyContainer from '../empty';
 import { actionUpdate } from '../../actions';
 import { withBoxContext } from '../../context';
-import WrapperField from './wrapper-field';
+import WrapperChild from './wrapper-child';
 import { chooseSelectorGlobalErrors } from '../../selectors';
 
 const Components = {};
@@ -36,10 +36,10 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     const children = containerChildren(props.data);
     this.state = { flatIds: {}, children };
 
-    const fn = id => (field, cb) => {
+    const fn = id => (child, cb) => {
       if (id) {
 
-        if (field === undefined) {
+        if (child === undefined) {
 
           this.setState(state => ({
             flatIds: Object.assign({}, state.flatIds, { [id]: undefined })
@@ -49,14 +49,14 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
 
         } else {
 
-          const { pattern = false, required = false, validate = false } = field || {}
+          const { pattern = false, required = false, validate = false } = child || {}
 
           this.setState(state => {
             // nel caso ci sia pù volte lo stesso campo, usato la prima volta con un validatore e dopo solo in visualizzazione
             if (
-              typeof field.pattern === 'undefined' &&
-              typeof field.required === 'undefined' &&
-              typeof field.validate === 'undefined' &&
+              typeof child.pattern === 'undefined' &&
+              typeof child.required === 'undefined' &&
+              typeof child.validate === 'undefined' &&
               typeof _get(this.state.flatIds, [id]) === 'undefined'
             ) {
               return
@@ -137,19 +137,19 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     return this.state.flatIds;
   }
 
-  onChange = (id, value, field) => {
+  onChange = (id, value, child) => {
     const { dispatch } = this.props;
-    const { onChange, validate } = field;
+    const { onChange, validate } = child;
     const [reducer, ...selector] = id.split('.');
     dispatch(actionUpdate(cleanPath(reducer), selector.join('.'), value, validate));
     if (onChange) {
-      this.eventOnChange({ onChange, id, value, field, reducer })
+      this.eventOnChange({ onChange, id, value, child, reducer })
     }
   };
 
-  eventOnChange = ({ onChange, id, value, field, reducer }) => {
+  eventOnChange = ({ onChange, id, value, child, reducer }) => {
     const { dispatch } = this.props
-    const baseData = Object.assign({}, { id, value, field, reducer }, this.commonProps)
+    const baseData = Object.assign({}, { id, value, child, reducer }, this.commonProps)
     if (typeof onChange === 'string') dispatch({ type: onChange, payload: baseData });
     else dispatch(onChange(baseData));
   }
@@ -159,29 +159,29 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
     return commonProps;
   }
 
-  nestedChildren = (field, prefix, prefixFunc) => {
-    const childrenList = Object.keys(field).filter(e => e.indexOf('_children') > 0)
+  nestedChildren = (child, prefix, prefixFunc) => {
+    const childrenList = Object.keys(child).filter(e => e.indexOf('_children') > 0)
     if (!childrenList.length) return
 
     const _children = childrenList.reduce((acc, inc) => {
-      const [fieldKey] = inc.split('_children');
+      const [childKey] = inc.split('_children');
       return Object.assign(acc,
         {
-          [fieldKey]: this.renderChildren(_get(field, inc), prefix, prefixFunc)
+          [childKey]: this.renderChildren(_get(child, inc), prefix, prefixFunc)
         })
     }, {});
 
     return _children
   }
 
-  renderChild = (field, index, prefix, prefixFunc) => {
+  renderChild = (child, index, prefix, prefixFunc) => {
     const { destroyValue } = this.props
     const {
       type,
       id,
       children,
       prefix: prefixChildrenId,
-    } = field;
+    } = child;
 
     const Component = this.getComponentMemoized(type)
 
@@ -192,34 +192,34 @@ export const createBoxInstance = () => connect(null, null, null, { forwardRef: t
 
     const getId = typeof id === 'string' && id
 
-    const fieldId = getPath(prefix, prefixChildrenId, getId, prefixFunc);
-    const [reducer, ...selector] = fieldId.split('.');
+    const childrenId = getPath(prefix, prefixChildrenId, getId, prefixFunc);
+    const [reducer, ...selector] = childrenId.split('.');
 
     return (
-      <WrapperField
+      <WrapperChild
         {...this.commonProps}
-        {...this.nestedChildren(field, fieldId, prefixFunc)}
-        key={`${fieldId}-${index}`}
+        {...this.nestedChildren(child, childrenId, prefixFunc)}
+        key={`${childrenId}-${index}`}
         id={id}
         defaultDestroyValue={destroyValue}
         prefix={prefixFunc ? prefixFunc(prefix).prefix : prefix}
-        field={field}
-        fieldId={fieldId}
+        child={child}
+        childrenId={childrenId}
         flatIds={this.state.flatIds}
-        setFlatId={this.setFlatIdsMemoized(fieldId)}
+        setFlatId={this.setFlatIdsMemoized(childrenId)}
         reducer={reducer}
         selector={selector.join('.')}
         Component={Component}
-        fieldType={typeof type === 'string' ? type : 'Class'}
+        childType={typeof type === 'string' ? type : 'Class'}
         onChange={this.onChange}
         renderChildren={this.renderChildren}
       >
-        {children && this.renderChildren(children, fieldId, prefixFunc)}
-      </WrapperField>
+        {children && this.renderChildren(children, childrenId, prefixFunc)}
+      </WrapperChild>
     )
   };
 
-  renderChildren = (children, prefix, prefixFunc) => children.map((field, index) => this.renderChild(field, index, prefix, prefixFunc));
+  renderChildren = (children, prefix, prefixFunc) => children.map((child, index) => this.renderChild(child, index, prefix, prefixFunc));
 
   render() {
     const { prefix, prefixFunc } = this.props;

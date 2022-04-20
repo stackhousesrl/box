@@ -3,9 +3,9 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import _get from 'lodash/get';
 import { selectorRulesDisabled } from '../../selectors'
-import BoxField from './field';
+import BoxChild from './child';
 
-class WrapperField extends PureComponent {
+class WrapperChild extends PureComponent {
 
   /*    
   componentWillReceiveProps(nextProps) {
@@ -18,21 +18,21 @@ class WrapperField extends PureComponent {
   */
 
   render() {
-    const { field, disabled } = this.props;
-    const { ruleModeDisable } = field;
+    const { child, disabled } = this.props;
+    const { ruleModeDisable } = child;
     if (disabled && !ruleModeDisable) return null;
 
     return (
-      <BoxField {...this.props} />
+      <BoxChild {...this.props} />
     )
   }
 }
 
 const makeMapStateToProps = (state, props) => {
-  const { prefix, field, contextProps, flatIds, disableRules, fieldId } = props;
-  const { rules } = field;
+  const { prefix, child, contextProps, flatIds, disableRules, childrenId } = props;
+  const { rules } = child;
   return {
-    disabled: !disableRules && rules && selectorRulesDisabled(state, contextProps, rules, flatIds, prefix, false, fieldId),
+    disabled: !disableRules && rules && selectorRulesDisabled(state, contextProps, rules, flatIds, prefix, false, childrenId),
     flatIds: undefined
   };
 };
@@ -41,4 +41,4 @@ export default connect(
   makeMapStateToProps,
   null, null,
   { forwardRef: true },
-)(WrapperField);
+)(WrapperChild);

@@ -57,9 +57,9 @@ export const selectorRulesDisabled = createSelector(
   (a, b, rules) => rules,
   (a, b, rules, children, prefix) => prefix,
   chooseSelectorGlobalErrors,
-  (a, b, rules, children, prefix, showAll, fieldId) => fieldId,
-  (state, extraData, rules, prefix, hasGloablError, fieldId) => {
-    const data = Object.assign({}, state, extraData, { hasError: hasGloablError.hasError, isValid: !hasGloablError.hasError, fieldId })
+  (a, b, rules, children, prefix, showAll, childrenId) => childrenId,
+  (state, extraData, rules, prefix, hasGloablError, childrenId) => {
+    const data = Object.assign({}, state, extraData, { hasError: hasGloablError.hasError, isValid: !hasGloablError.hasError, childrenId })
     const r = _isFunction(rules) ? rules(data) : rules;
     if (!r) return false
     const keys = getKeys(r, { prefix });
@@ -120,14 +120,14 @@ export const chooseSelectorErrors = createSelector(
   getStateData,
   (state, extraData) => extraData,
   select,
-  (a, b, fieldId) => fieldId,
-  (a, b, c, field) => field,
+  (a, b, childrenId) => childrenId,
+  (a, b, c, child) => child,
   (a, b, c, d, prefix) => prefix,
-  (state, extraData, fieldValue, fieldId, field, prefix) => {
-    const validation = generateValidationsObject([Object.assign({}, field, {
-      id: transformPrefix(fieldId, prefix)
+  (state, extraData, childValue, childrenId, child, prefix) => {
+    const validation = generateValidationsObject([Object.assign({}, child, {
+      id: transformPrefix(childrenId, prefix)
     })]);
-    const [error, results] = checkRules(validation, Object.assign({}, state, extraData, { self: fieldValue }), false, { prefix })
+    const [error, results] = checkRules(validation, Object.assign({}, state, extraData, { self: childValue }), false, { prefix })
     return error && _join(results.length === 0 ? ['error'] : results, '|#|')
   }
 );

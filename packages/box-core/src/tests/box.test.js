@@ -26,7 +26,7 @@ describe('Test children', () => {
     });
   });
 
-  it('Quando passo un field valido, mi aspetto il render dell\'elemento correttamente', () => {
+  it('Quando passo un child valido, mi aspetto il render dell\'elemento correttamente', () => {
 
     const children = [
       {
@@ -47,7 +47,7 @@ describe('Test children', () => {
 
   })
 
-  it('Quando passo un field non valido, mi aspetto il render dell\'elemento correttamente', () => {
+  it('Quando passo un child non valido, mi aspetto il render dell\'elemento correttamente', () => {
 
     const children = [
       {
@@ -132,7 +132,7 @@ describe('Test value by id', () => {
     });
   });
 
-  it('Quando passo un field valido, mi aspetto il render dell\'elemento correttamente', () => {
+  it('Quando passo un child valido, mi aspetto il render dell\'elemento correttamente', () => {
 
     const children = [
       {
@@ -228,7 +228,7 @@ describe('Test value by root id', () => {
     });
   });
 
-  it('Quando passo un field valido, mi aspetto il render dell\'elemento correttamente', () => {
+  it('Quando passo un child valido, mi aspetto il render dell\'elemento correttamente', () => {
 
     const children = [
       {

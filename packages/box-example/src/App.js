@@ -63,7 +63,7 @@ const model = [
     type: 'text',
     id: 'citta',
     rules: {
-      '^fieldId': { con: 'citta' }
+      '^childrenId': { con: 'citta' }
     }
   },
   /* {
@@ -203,6 +203,10 @@ const model = [
       '^hasError': { eq: true }
     }
   },
+  {
+    type: 'LargeComponent',
+    id: '#indirizzo',
+  }
 ]
 
 const modelNews = [

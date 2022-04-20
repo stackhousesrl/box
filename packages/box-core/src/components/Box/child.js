@@ -10,7 +10,7 @@ import { chooseSelectorByNode, chooseSelectorErrors, selectorRules } from '../..
 import { actionResetData } from '../../actions';
 import { select, getPath } from '../../utils';
 
-class BoxField extends PureComponent {
+class BoxChild extends PureComponent {
   static contextType = ReactReduxContext;
 
   static defaultProps = {
@@ -26,14 +26,14 @@ class BoxField extends PureComponent {
   componentDidMount() {
     const { setFlatId, validate, required, pattern } = this.props;
 
-    const hasDefaultValue = typeof this.props.field.default === 'number'
+    const hasDefaultValue = typeof this.props.child.default === 'number'
       ? true
-      : typeof this.props.field.default !== 'undefined'
+      : typeof this.props.child.default !== 'undefined'
 
     setFlatId({ validate, required, pattern }, () => {
 
       if (typeof this.props.value === 'undefined' && hasDefaultValue && this.props.id) {
-        this.onChange(this.props.field.default);
+        this.onChange(this.props.child.default);
       }
 
       this.onLoadHandler();
@@ -55,49 +55,49 @@ class BoxField extends PureComponent {
   }
 
   onLoadHandler = () => {
-    const { field, disabled } = this.props;
-    const { onLoad } = field;
+    const { child, disabled } = this.props;
+    const { onLoad } = child;
     if (onLoad && !disabled) {
       this.onLoad()
     }
   }
 
   componentWillUnmount() {
-    this.resetField();
+    this.resetChild();
     this.onDestroy();
   }
 
-  resetField = () => {
-    const { id, field, onChange, fieldId, setFlatId, defaultDestroyValue } = this.props;
-    const { destroyValue = defaultDestroyValue } = field
+  resetChild = () => {
+    const { id, child, onChange, childrenId, setFlatId, defaultDestroyValue } = this.props;
+    const { destroyValue = defaultDestroyValue } = child
     setFlatId(undefined, () => {
       if (destroyValue && id) {
-        onChange(fieldId, undefined, field);
+        onChange(childrenId, undefined, child);
       }
     })
   }
 
   onLoad = () => {
-    const { field, dispatch, contextProps } = this.props;
-    const { onLoad } = field;
+    const { child, dispatch, contextProps } = this.props;
+    const { onLoad } = child;
     if (!onLoad) return;
     if (this.loaded) return;
     this.loaded = true;
-    if (typeof onLoad === 'string') dispatch({ type: onLoad, ...contextProps, field, fromOnLoad: true });
-    else dispatch({ fromOnLoad: true, ...onLoad({ field, ...contextProps }) });
+    if (typeof onLoad === 'string') dispatch({ type: onLoad, ...contextProps, child, fromOnLoad: true });
+    else dispatch({ fromOnLoad: true, ...onLoad({ child, ...contextProps }) });
   }
 
   onDestroy = () => {
-    const { field, dispatch, contextProps } = this.props;
-    const { onDestroy } = field;
+    const { child, dispatch, contextProps } = this.props;
+    const { onDestroy } = child;
     if (!onDestroy) return;
-    if (typeof onDestroy === 'string') dispatch({ type: onDestroy, ...contextProps, field, fromOnDestroy: true });
-    else dispatch({ fromOnDestroy: true, ...onDestroy({ field, ...contextProps }) });
+    if (typeof onDestroy === 'string') dispatch({ type: onDestroy, ...contextProps, child, fromOnDestroy: true });
+    else dispatch({ fromOnDestroy: true, ...onDestroy({ child, ...contextProps }) });
   }
 
   onChange = value => {
-    const { field, onChange, fieldId } = this.props;
-    onChange(fieldId, value, field);
+    const { child, onChange, childrenId } = this.props;
+    onChange(childrenId, value, child);
     this.setState({ blur: false })
   }
 
@@ -106,10 +106,10 @@ class BoxField extends PureComponent {
   }
 
   onAction = (paramsFromArgs) => {
-    const { valueId, fieldId, dispatch, field, id, contextProps } = this.props;
+    const { valueId, childrenId, dispatch, child, id, contextProps } = this.props;
     const { store } = this.context;
-    const { action, params: paramsField } = field;
-    const selectorId = getPath(valueId || fieldId);
+    const { action, params: paramsChild } = child;
+    const selectorId = getPath(valueId || childrenId);
 
     const [reducer, ...selector] = selectorId.split('.');
     const value = select()(store.getState(), selectorId);
@@ -118,7 +118,7 @@ class BoxField extends PureComponent {
       if (action === '#reset') {
         return dispatch(actionResetData(reducer, selector.join('.')));
       }
-      const baseData = Object.assign({}, contextProps, { params: paramsField || paramsFromArgs, value, id, field, fieldId, valueId, selectorId });
+      const baseData = Object.assign({}, contextProps, { params: paramsChild || paramsFromArgs, value, id, child, childrenId, valueId, selectorId });
       if (typeof action === 'string') return dispatch({ type: action, payload: baseData });
       else return action({ dispatch, payload: baseData });
     }
@@ -141,8 +141,8 @@ class BoxField extends PureComponent {
 
   get errorText() {
     const error = this.getError;
-    const { field } = this.props
-    const { errorMessages } = field
+    const { child } = this.props
+    const { errorMessages } = child
     return error && error.map(e => typeof errorMessages === 'string'
       ? errorMessages
       : (errorMessages && errorMessages[e]) || e || 'Error').join(' ')
@@ -150,15 +150,15 @@ class BoxField extends PureComponent {
 
   get value() {
     const { value: valueFromState } = this.state
-    const { value, field } = this.props
-    const { saveOnState } = field
+    const { value, child } = this.props
+    const { saveOnState } = child
     return saveOnState ? valueFromState : value
   }
 
   render() {
     const {
       Component,
-      field,
+      child,
       match,
       dispatch,
       history,
@@ -178,14 +178,14 @@ class BoxField extends PureComponent {
       customSelectorId,
       customSelectorFromId,
       saveOnState,
-      ...restField
-    } = field
+      ...restChild
+    } = child
 
-    const actions = restField.action && { onAction: this.onAction }
+    const actions = restChild.action && { onAction: this.onAction }
 
     return (
       <Component
-        {...restField}
+        {...restChild}
         {...props}
         {...actions}
         value={this.value}
@@ -202,9 +202,9 @@ class BoxField extends PureComponent {
 const makeMapStateToProps = (state, props) => {
   const {
     prefix,
-    fieldId,
+    childrenId,
     id,
-    field,
+    child,
     contextProps,
     disableErrors
   } = props;
@@ -213,60 +213,60 @@ const makeMapStateToProps = (state, props) => {
     value: valueFromProps,
     customSelectorId,
     customSelectorValue,
-  } = field;
+  } = child;
 
   const makeSelectorId = customSelectorId || _isFunction(id)
-    ? (customSelectorId || id)(state, fieldId, field, contextProps)
-    : (id && chooseSelectorByNode(state, contextProps, fieldId, field))
+    ? (customSelectorId || id)(state, childrenId, child, contextProps)
+    : (id && chooseSelectorByNode(state, contextProps, childrenId, child))
 
-  const field_rules = Object.keys(field).filter(e => e.indexOf('_rules') > 0)
+  const child_rules = Object.keys(child).filter(e => e.indexOf('_rules') > 0)
   // fromId e customSelectorFromId, servono per la retrocompatibilità
-  const field_selector = Object.keys(field).filter(e => e === 'fromId' || e === 'customSelectorFromId' || e.indexOf('_fromId') > 0)
-  const field_func = Object.keys(field).filter(e => e.indexOf('_func') > 0 && typeof e === 'function')
+  const child_selector = Object.keys(child).filter(e => e === 'fromId' || e === 'customSelectorFromId' || e.indexOf('_fromId') > 0)
+  const child_func = Object.keys(child).filter(e => e.indexOf('_func') > 0 && typeof e === 'function')
 
   const valueId = (id || customSelectorId) ? makeSelectorId : valueFromProps;
   const value = customSelectorValue ? customSelectorValue(state, valueId, contextProps) : valueId;
 
-  const field_with_rules = field_rules.reduce((acc, inc) => {
-    const [fieldKey] = inc.split('_rules');
+  const child_with_rules = child_rules.reduce((acc, inc) => {
+    const [childKey] = inc.split('_rules');
     return Object.assign({}, acc,
       {
-        [fieldKey]: selectorRules(_get(field, inc), prefix)(state, contextProps) || _get(field, `${fieldKey}_default`),
+        [childKey]: selectorRules(_get(child, inc), prefix)(state, contextProps) || _get(child, `${childKey}_default`),
       })
   }, {});
 
-  const field_with_selector = field_selector.reduce((acc, inc) => {
-    const [fieldKey] = (inc === 'fromId' || inc === 'customSelectorFromId') ? ['fromStore'] : inc.split('_fromId');
-    const fieldValue = _get(field, inc) || _get(field, `${fieldKey}_default`)
+  const child_with_selector = child_selector.reduce((acc, inc) => {
+    const [childKey] = (inc === 'fromId' || inc === 'customSelectorFromId') ? ['fromStore'] : inc.split('_fromId');
+    const childValue = _get(child, inc) || _get(child, `${childKey}_default`)
     return Object.assign({}, acc,
       {
-        [fieldKey]: _isFunction(fieldValue)
-          ? fieldValue(state, getPath(prefix), field, contextProps)
-          : chooseSelectorByNode(state, contextProps, getPath(prefix, fieldValue), field)
+        [childKey]: _isFunction(childValue)
+          ? childValue(state, getPath(prefix), child, contextProps)
+          : chooseSelectorByNode(state, contextProps, getPath(prefix, childValue), child)
       })
   }, {});
 
-  const field_with_func = field_func.reduce((acc, inc) => {
-    const [fieldKey] = inc.split('_func');
+  const child_with_func = child_func.reduce((acc, inc) => {
+    const [childKey] = inc.split('_func');
     return Object.assign({}, acc,
       {
-        [fieldKey]: _get(field, inc)(value, state, contextProps, fieldId),
+        [childKey]: _get(child, inc)(value, state, contextProps, childrenId),
       })
   }, {});
 
 
   const finalProps = {
-    pattern: field.pattern,
-    required: field.required,
-    validate: field.validate,
-    ...field_with_rules,
-    ...field_with_func,
-    ...field_with_selector,
+    pattern: child.pattern,
+    required: child.required,
+    validate: child.validate,
+    ...child_with_rules,
+    ...child_with_func,
+    ...child_with_selector,
     value
   };
 
   const { required, pattern, validate } = finalProps
-  const error = !disableErrors && fieldId && (pattern || required || validate) && chooseSelectorErrors(state, contextProps, fieldId, { pattern, required, validate }, prefix)
+  const error = !disableErrors && childrenId && (pattern || required || validate) && chooseSelectorErrors(state, contextProps, childrenId, { pattern, required, validate }, prefix)
 
   return {
     ...finalProps,
@@ -279,4 +279,4 @@ export default connect(
   makeMapStateToProps,
   null, null,
   { forwardRef: true },
-)(BoxField);
+)(BoxChild);

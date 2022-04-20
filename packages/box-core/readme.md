@@ -7,8 +7,8 @@ Libreria per la creazione di form e layout avanzati, è integrabile su qualsiasi
 * [Installation](#installation)
 * [Getting Started](#getting-started)
 * [Configs](#configs)
-* [Field schema](#field-schema)
-* [Field component](#field-component)
+* [Child schema](#child-schema)
+* [Child component](#child-component)
 * [Id](#id)
 * [Methods](#methods)
 * [Rules and validation](#rules-and-validation)
@@ -87,10 +87,10 @@ Esempio
 |--------------|----------------|-------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | children       | `array` | no         |               | Schema del modello da visualizzare                                                                                                                                                   |
 | prefix       | `string`       | yes         |               | Path (dotStyle) è il nome del reducer in cui salvare e leggere i dati, es. tickets.detail                                                                                            |
-| destroyValue | `bool`         | optional    | false         | Regola di default per tutti i field del modello, se true svuota il dato se il componente viene distrutto, utile quando ci sono le regole, si evita di lasciare dati sporchi nel form |
+| destroyValue | `bool`         | optional    | false         | Regola di default per tutti i child del modello, se true svuota il dato se il componente viene distrutto, utile quando ci sono le regole, si evita di lasciare dati sporchi nel form |
 
 
-### Field schema
+### Child schema
 | Prop Name       | Type                             | Is Required             | Default Value | Description                                                                                                                                                                                                                    |
 |-----------------|----------------------------------|-------------------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | type            | `string|component`               | optional                | `div`         | Componente da visualizzare                                                                                                                                                                                                     |
@@ -112,15 +112,15 @@ Esempio
 | action          | `string|func`                    | optional                |               | Se stringa scatena un dispatch sul nome dell'azione, se funzione passa il dispatch per poter invocare azioni custom                                                                                                            |
 
 
-### Field Component
+### Child Component
 I tuoi componenti custom riceveranno in automatico le seguenti props, oltre al tutte le proprietà che userai nel tuo schema
 
 | Prop Name | Type     | Description                                                             |
 |-----------|----------|-------------------------------------------------------------------------|
 | onChange  | `func`   | Metodo per aggiornare i dati nell'id indicato                           |
 | value     | `any`    | Valore recuperato dal selettore                                         |
-| id        | `string` | Id field, obbligatorio se si vogliono leggere o salvare i dati su redux |
-| field     | `object` | Schema del field corrente                                               |
+| id        | `string` | Id child, obbligatorio se si vogliono leggere o salvare i dati su redux |
+| child     | `object` | Schema del child corrente                                               |
 | onAction  | `func`   | Da utilizzare per invocare il dispatch                                  |
 | disabled  | `bool`   | in base alla rules                                                      |
 | error     | `string` | in base a validation                                                    |
@@ -234,9 +234,9 @@ const model = [
 
 | Key       | Type   | Description                                                              |
 |-----------|--------|--------------------------------------------------------------------------|
-| ^hasError | `bool` | E' presente un errore nel form, vengono analizzati solo i field visibili |
-| ^isValid | `bool`  | Il form è valido, vengono analizzati solo i field visibili |
-| ^fieldId | `string`  | Valore della chiave |
+| ^hasError | `bool` | E' presente un errore nel form, vengono analizzati solo i child visibili |
+| ^isValid | `bool`  | Il form è valido, vengono analizzati solo i child visibili |
+| ^childrenId | `string`  | Valore della chiave |
 
 Utile quando si vuole disabilitare il tasto salva se nel form sono presenti errori
 
@@ -249,9 +249,9 @@ Utile quando si vuole disabilitare il tasto salva se nel form sono presenti erro
   rules: { '^hasError': { eq: false } }
 }
 ```
-• Field con regole
+• Child con regole
 
-Tutti i field passati nel modello possono esser gestiti tramite rules, basterà appendere al nome _rules
+Tutti i child passati nel modello possono esser gestiti tramite rules, basterà appendere al nome _rules
 
 ```JS
 {
