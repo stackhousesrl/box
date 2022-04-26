@@ -4,9 +4,11 @@ import Box, { BoxContextProvider } from '@stackhouseos/box-core'
 import { createSelector } from 'reselect';
 
 const selector = createSelector(
-  state => state.global,
-  data => {
-    return data.dati?.cognome
+  (state) => {
+    return state.global
+  },
+  (data) => {
+    return data.indirizzo
   }
 )
 
@@ -204,62 +206,12 @@ const model = [
     }
   },
   {
+    type: 'title',
+    title_fromId: 'selector_indirizzo',
+  },
+  {
     type: 'LargeComponent',
-    id: '#indirizzo',
-  }
-]
-
-const modelNews = [
-  {
-    type: 'text',
-    id: '^app',
-  },
-  {
-    type: 'input',
-    id: 'nome',
-    required: true
-  },
-  {
-    type: 'input',
-    id: 'nome',
-    required: true
-  },
-  {
-    type: 'input',
-    id: 'nome',
-    required: true
-  },
-  {
-    type: 'input',
-    id: 'nome',
-    required: true
-  },
-  {
-    type: 'input',
-    id: 'cognome'
-  },
-  {
-    type: 'select',
-    name: 'Attivo',
-    options: [{ label: 'si', value: 'si' }, { label: 'no', value: 'no' }],
-    id: 'active',
-    validate: {
-      'active': { eq: 'si' }
-    },
-    rules: {
-      '^global.active': { eq: 'si' }
-    }
-  },
-  {
-    type: 'button',
-    title: 'save',
-    action: "SAVE",
-    ruleModeDisable: true,
-    rules: [{
-      '^hasError': { eq: false }
-    }, {
-      '^global.enabled': { eq: true }
-    }]
+    id: 'selector_indirizzo',
   }
 ]
 
@@ -270,16 +222,19 @@ function App() {
   return (
     <div className="App">
       <BoxContextProvider value={{ showErrors, app: { name: 'ZUCCA' } }}>
-        <Box prefix="global" data={model} ref={ref} />
+        <Box
+          prefix="global"
+          data={model}
+          ref={ref}
+          selectors={{
+            selector_indirizzo: selector
+          }}
+        />
       </BoxContextProvider>
       <button onClick={() => {
         setShowErrors(true)
         console.log(ref.current.isValid())
       }}>SHOW ERRORS</button>
-      {/*       <br />
-      <BoxContextProvider value={{ app: 'gino' }}>
-        <Box prefix="news" data={modelNews} />
-      </BoxContextProvider> */}
     </div>
   );
 }

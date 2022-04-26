@@ -32,6 +32,9 @@ Box.registerComponents({
     style={{ background: color, border: '1px solid', borderColor: error ? 'red' : 'gray', padding: 5 }}>
     t: {text} v:{value} s:{fromStore}
   </p>,
+  title: ({ title }) => <h2>
+    {title}
+  </h2>,
   main: ({ nome, cognome, value, fromStore }) => {
     return <div style={{ background: 'gray' }}>
       {`${value}, ${nome}, ${cognome}, ${fromStore}`}
@@ -50,7 +53,7 @@ Box.registerComponents({
   button: ({ title, disabled }) => {
     return <button disabled={disabled}>{title}</button>
   },
-  LargeComponent: ({ value='' }) => {
+  LargeComponent: ({ value = '' }) => {
     const deferredValue = useDeferredValue(value);
     return Array(1000).fill(1).map((r, i) => <div key={i}>{i + deferredValue}</div>)
   }

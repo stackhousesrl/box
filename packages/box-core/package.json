@@ -13,7 +13,7 @@
     "prepublish": "yarn task-babel",
     "task-babel-watch": "yarn task-babel -w",
     "task-babel": "babel -d lib src --copy-files --no-comments --minified",
-    "task-babel-dev": "babel -d lib src --copy-files",
+    "task-babel-dev": "babel -d lib src --copy-files -w",
     "test": "jest",
     "test-w": "jest --watch",
     "coverage": "jest --collect-coverage"

@@ -206,15 +206,16 @@ const makeMapStateToProps = (state, props) => {
     id,
     child,
     contextProps,
-    disableErrors
+    disableErrors,
+    selectors,
   } = props;
-
+  
   const {
     value: valueFromProps,
-    customSelectorId,
     customSelectorValue,
   } = child;
-
+  
+  const customSelectorId = (selectors && selectors[id])
   const makeSelectorId = customSelectorId || _isFunction(id)
     ? (customSelectorId || id)(state, childId, child, contextProps)
     : (id && chooseSelectorByNode(state, contextProps, childId, child))
@@ -238,10 +239,11 @@ const makeMapStateToProps = (state, props) => {
   const child_with_selector = child_selector.reduce((acc, inc) => {
     const [childKey] = (inc === 'fromId' || inc === 'customSelectorFromId') ? ['fromStore'] : inc.split('_fromId');
     const childValue = _get(child, inc) || _get(child, `${childKey}_default`)
+    const customSelectorFromId = (selectors && selectors[childValue])
     return Object.assign({}, acc,
       {
-        [childKey]: _isFunction(childValue)
-          ? childValue(state, getPath(prefix), child, contextProps)
+        [childKey]: customSelectorFromId || _isFunction(childValue)
+          ? (customSelectorFromId || childValue)(state, getPath(prefix), child, contextProps)
           : chooseSelectorByNode(state, contextProps, getPath(prefix, childValue), child)
       })
   }, {});
