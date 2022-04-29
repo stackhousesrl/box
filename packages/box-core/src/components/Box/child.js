@@ -208,24 +208,28 @@ const makeMapStateToProps = (state, props) => {
     contextProps,
     disableErrors,
     selectors,
+    replacers
   } = props;
-  
+
   const {
     value: valueFromProps,
-    customSelectorValue,
+    customValue,
   } = child;
-  
+
   const customSelectorId = (selectors && selectors[id])
   const makeSelectorId = customSelectorId || _isFunction(id)
     ? (customSelectorId || id)(state, childId, child, contextProps)
     : (id && chooseSelectorByNode(state, contextProps, childId, child))
 
   const child_rules = Object.keys(child).filter(e => e.indexOf('_rules') > 0)
+
   // fromId e customSelectorFromId, servono per la retrocompatibilità
   const child_selector = Object.keys(child).filter(e => e === 'fromId' || e === 'customSelectorFromId' || e.indexOf('_fromId') > 0)
   const child_func = Object.keys(child).filter(e => e.indexOf('_func') > 0 && typeof e === 'function')
 
   const valueId = (id || customSelectorId) ? makeSelectorId : valueFromProps;
+
+  const customSelectorValue = (replacers && replacers[customValue])
   const value = customSelectorValue ? customSelectorValue(state, valueId, contextProps) : valueId;
 
   const child_with_rules = child_rules.reduce((acc, inc) => {
@@ -239,12 +243,19 @@ const makeMapStateToProps = (state, props) => {
   const child_with_selector = child_selector.reduce((acc, inc) => {
     const [childKey] = (inc === 'fromId' || inc === 'customSelectorFromId') ? ['fromStore'] : inc.split('_fromId');
     const childValue = _get(child, inc) || _get(child, `${childKey}_default`)
+    const customReplacerValue = replacers && replacers[_get(child, `${childKey}_customValue`)]
+
     const customSelectorFromId = (selectors && selectors[childValue])
+
+    const val = customSelectorFromId || _isFunction(childValue)
+      ? (customSelectorFromId || childValue)(state, getPath(prefix), child, contextProps)
+      : chooseSelectorByNode(state, contextProps, getPath(prefix, childValue), child)
+
+    const finalValue = customReplacerValue ? customReplacerValue(state, val, contextProps) : val;
+
     return Object.assign({}, acc,
       {
-        [childKey]: customSelectorFromId || _isFunction(childValue)
-          ? (customSelectorFromId || childValue)(state, getPath(prefix), child, contextProps)
-          : chooseSelectorByNode(state, contextProps, getPath(prefix, childValue), child)
+        [childKey]: finalValue
       })
   }, {});
 

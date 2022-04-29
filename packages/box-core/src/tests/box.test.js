@@ -1,9 +1,9 @@
-
-import React from 'react';
+import 'jsdom-global/register'
+import React from 'react'
 import { Provider } from 'react-redux';
 import Box from '../index'
 import configureStore from 'redux-mock-store';
-import { render } from 'enzyme';
+import { render } from '@testing-library/react';
 
 const mockStore = configureStore([]);
 
@@ -43,7 +43,7 @@ describe('Test children', () => {
       </Provider>
     );
 
-    expect(wrapper.html()).toEqual('<h1>andrea</h1>')
+    expect(wrapper.baseElement.innerHTML).toEqual('<div><div><h1>andrea</h1></div></div>')
 
   })
 
@@ -62,7 +62,7 @@ describe('Test children', () => {
       </Provider>
     );
 
-    expect(wrapper.html()).toEqual('')
+    expect(wrapper.baseElement.innerHTML).toEqual('<div><div></div></div>')
 
   })
 
@@ -87,7 +87,7 @@ describe('Test children', () => {
       </Provider>
     );
 
-    expect(wrapper.html()).toEqual(`<h1>andrea</h1><h1>carla</h1>`)
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><h1>andrea</h1><h1>carla</h1></div></div>`)
   })
 
   it('Quando passo children validi nested, mi aspetto il render dell\'elemento correttamente', () => {
@@ -115,7 +115,7 @@ describe('Test children', () => {
       </Provider>
     );
 
-    expect(wrapper.html()).toEqual(`<div><h1>andrea</h1></div><div><h1>carla</h1></div>`)
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div><h1>andrea</h1></div><div><h1>carla</h1></div></div></div>`)
   })
 
 })
@@ -149,7 +149,7 @@ describe('Test value by id', () => {
       </Provider>
     );
 
-    expect(wrapper.html()).toEqual('<h1>andrea</h1>')
+    expect(wrapper.baseElement.innerHTML).toEqual('<div><div><h1>andrea</h1></div></div>')
 
   })
 
@@ -174,7 +174,7 @@ describe('Test value by id', () => {
       </Provider>
     );
 
-    expect(wrapper.html()).toEqual(`<h1>andrea</h1><h1>carla</h1>`)
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><h1>andrea</h1><h1>carla</h1></div></div>`)
   })
 
   it('Quando passo children validi nested, mi aspetto il render dell\'elemento correttamente', () => {
@@ -202,7 +202,7 @@ describe('Test value by id', () => {
       </Provider>
     );
 
-    expect(wrapper.html()).toEqual(`<div><h1>andrea</h1></div><div><h1>carla</h1></div>`)
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div><h1>andrea</h1></div><div><h1>carla</h1></div></div></div>`)
   })
 
 })
@@ -245,7 +245,7 @@ describe('Test value by root id', () => {
       </Provider>
     );
 
-    expect(wrapper.html()).toEqual('<h1>andrea</h1>')
+    expect(wrapper.baseElement.innerHTML).toEqual('<div><div><h1>andrea</h1></div></div>')
 
   })
 
@@ -270,7 +270,7 @@ describe('Test value by root id', () => {
       </Provider>
     );
 
-    expect(wrapper.html()).toEqual(`<h1>andrea</h1><h1>carla</h1>`)
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><h1>andrea</h1><h1>carla</h1></div></div>`)
   })
 
   it('Quando passo children validi nested, mi aspetto il render dell\'elemento correttamente', () => {
@@ -300,7 +300,7 @@ describe('Test value by root id', () => {
       </Provider>
     );
 
-    expect(wrapper.html()).toEqual(`<div><h1>andrea</h1></div><div><h1>carla</h1></div>`)
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div><h1>andrea</h1></div><div><h1>carla</h1></div></div></div>`)
   })
 
   it('Quando passo children validi nested con prefix nei nodi, mi aspetto il render dell\'elemento correttamente', () => {
@@ -337,7 +337,7 @@ describe('Test value by root id', () => {
       </Provider>
     );
 
-    expect(wrapper.html()).toEqual(`<div><h1>andrea</h1></div><div><div><h1>carla</h1></div></div>`)
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div><h1>andrea</h1></div><div><div><h1>carla</h1></div></div></div></div>`)
   })
 
 })

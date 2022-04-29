@@ -85,9 +85,11 @@ Esempio
 ### Box
 | Prop Name    | Type           | Is Required | Default Value | Description                                                                                                                                                                          |
 |--------------|----------------|-------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| children       | `array` | no         |               | Schema del modello da visualizzare                                                                                                                                                   |
+| data       | `array` | yes         |               | Schema del modello da visualizzare                                                                                                                                                   |
 | prefix       | `string`       | yes         |               | Path (dotStyle) è il nome del reducer in cui salvare e leggere i dati, es. tickets.detail                                                                                            |
 | destroyValue | `bool`         | optional    | false         | Regola di default per tutti i child del modello, se true svuota il dato se il componente viene distrutto, utile quando ci sono le regole, si evita di lasciare dati sporchi nel form |
+| selectors | `object`         | optional    | null         | Selettori validi da sostituire agli id o _fromId |
+| replacer | `object`         | optional    | null         | Replacer dei valori da sostituire a customValue |
 
 
 ### Child schema
