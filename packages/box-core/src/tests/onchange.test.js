@@ -11,11 +11,11 @@ import { userSlice } from './test-utils';
 const Text = ({ text, value }) => <h1>{text || value}</h1>
 const Input = ({ onChange, value = '', name, childId }) => <input data-testid={childId} name={name} value={value} onChange={evt => onChange(evt.target.value)} />
 const Container = ({ children }) => <div>{children}</div>
-const CustomError = ({ setError, childId }) => {
+const CustomError = ({ setError, childId, error }) => {
   useEffect(() => {
-    setError(true)
+    setError(true, 'error1')
   }, [setError])
-  return <h1 data-testid={childId}>{'error'}</h1>
+  return <h1 data-testid={childId}>{error}</h1>
 }
 
 Box.setComponents({
@@ -184,7 +184,7 @@ describe('Test children update onChange', () => {
 
     const inputEl = wrapper.getByTestId('app.surname')
 
-    expect(wrapper.baseElement.innerHTML).toEqual('<div><div><h1 data-testid="app.surname">error</h1><h1>KO!</h1></div></div>')
+    expect(wrapper.baseElement.innerHTML).toEqual('<div><div><h1 data-testid="app.surname">error1</h1><h1>KO!</h1></div></div>')
 
   })
 
