@@ -3,6 +3,9 @@ import _trimStart from 'lodash/trimStart';
 import _omit from 'lodash/omit';
 import _get from 'lodash/get';
 import _isFunction from 'lodash/isFunction';
+import _isPlainObject from 'lodash/isPlainObject';
+import _mapKeys from 'lodash/mapKeys';
+import _mapValues from 'lodash/mapValues';
 import EmptyContainer from '../components/empty';
 
 export const isImmutable = obj => obj && (_isFunction(obj.asImmutable) && _isFunction(obj.get))
@@ -85,3 +88,29 @@ export const sortWithOrder = (object, order) => {
       .filter(({ key }) => order[key] === undefined)
   ]
 }
+
+export function mapKeysDeepLodash(obj, cb, isRecursive) {
+  if (!obj && !isRecursive) {
+    return {};
+  }
+
+  if (!isRecursive) {
+    if (typeof obj === "string" || typeof obj === "number" || typeof obj === "boolean") {
+      return {};
+    }
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(item => mapKeysDeepLodash(item, cb, true));
+  }
+
+  if (!_isPlainObject(obj)) {
+    return obj;
+  }
+
+  const result = _mapKeys(obj, cb);
+
+  return _mapValues(result, value =>
+    mapKeysDeepLodash(value, cb, true)
+  );
+};

@@ -6,12 +6,9 @@ import _findKey from 'lodash/findKey';
 import _isFunction from 'lodash/isFunction';
 import _join from 'lodash/join';
 import _startsWith from 'lodash/startsWith';
-import _isPlainObject from 'lodash/isPlainObject';
-import _mapKeys from 'lodash/mapKeys';
-import _mapValues from 'lodash/mapValues';
 import checkRules, { getKeys } from '@stackhouseos/json-rules';
 import { unflatten } from '../flat';
-import { cleanPath, cleanPathHash, isImmutable } from '../utils';
+import { cleanPath, cleanPathHash, isImmutable, mapKeysDeepLodash } from '../utils';
 
 const getStateData = state => isImmutable(state) ? state.toJS() : state;
 
@@ -75,31 +72,6 @@ export const chooseSelectorByNode = createSelector(
   (data) => data
 );
 
-function mapKeysDeepLodash(obj, cb, isRecursive) {
-  if (!obj && !isRecursive) {
-    return {};
-  }
-
-  if (!isRecursive) {
-    if (typeof obj === "string" || typeof obj === "number" || typeof obj === "boolean") {
-      return {};
-    }
-  }
-
-  if (Array.isArray(obj)) {
-    return obj.map(item => mapKeysDeepLodash(item, cb, true));
-  }
-
-  if (!_isPlainObject(obj)) {
-    return obj;
-  }
-
-  const result = _mapKeys(obj, cb);
-
-  return _mapValues(result, value =>
-    mapKeysDeepLodash(value, cb, true)
-  );
-};
 
 const generateValidationsObject = (children, errorMessage = 'custom-error') => {
   return children.filter((e) => e.id && (e.pattern || e.required || e.validate))
