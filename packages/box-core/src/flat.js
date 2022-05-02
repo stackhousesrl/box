@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 var isBuffer = require('is-buffer')
 
 module.exports = flatten

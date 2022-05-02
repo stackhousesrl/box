@@ -6,17 +6,6 @@ import { selectorRulesDisabled } from '../../selectors'
 import BoxChild from './child';
 
 class WrapperChild extends PureComponent {
-
-  /*    
-  componentWillReceiveProps(nextProps) {
-    for (const index in nextProps) {
-      if (nextProps[index] !== this.props[index]) {
-        console.log(index, this.props, this.props[index], '-->', nextProps[index]);
-      }
-    }
-  } 
-  */
-
   render() {
     const { child, disabled } = this.props;
     const { ruleModeDisable } = child;

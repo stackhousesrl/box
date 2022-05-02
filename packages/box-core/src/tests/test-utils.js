@@ -1,4 +1,4 @@
-// test-utils.jsx
+/* istanbul ignore file */
 import { createSlice } from '@reduxjs/toolkit'
 import { set } from 'lodash'
 
