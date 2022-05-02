@@ -213,7 +213,7 @@ const makeMapStateToProps = (state, props) => {
 
   const {
     value: valueFromProps,
-    customValue,
+    replaceValue,
   } = child;
 
   const customSelectorId = (selectors && selectors[id])
@@ -224,12 +224,12 @@ const makeMapStateToProps = (state, props) => {
   const child_rules = Object.keys(child).filter(e => e.indexOf('_rules') > 0)
 
   // fromId e customSelectorFromId, servono per la retrocompatibilità
-  const child_selector = Object.keys(child).filter(e => e === 'fromId' || e === 'customSelectorFromId' || e.indexOf('_fromId') > 0)
+  const child_selector = Object.keys(child).filter(e => e.indexOf('_fromId') > 0 || e.indexOf('_id') > 0)
   const child_func = Object.keys(child).filter(e => e.indexOf('_func') > 0 && typeof e === 'function')
 
   const valueId = (id || customSelectorId) ? makeSelectorId : valueFromProps;
 
-  const customSelectorValue = (replacers && replacers[customValue])
+  const customSelectorValue = (replacers && replacers[replaceValue])
   const value = customSelectorValue ? customSelectorValue(state, valueId, contextProps) : valueId;
 
   const child_with_rules = child_rules.reduce((acc, inc) => {
@@ -241,9 +241,14 @@ const makeMapStateToProps = (state, props) => {
   }, {});
 
   const child_with_selector = child_selector.reduce((acc, inc) => {
-    const [childKey] = (inc === 'fromId' || inc === 'customSelectorFromId') ? ['fromStore'] : inc.split('_fromId');
+    const [childKey] = inc.indexOf('_id') > 0
+      ? inc.split('_id')
+      : inc.indexOf('_fromId') > 0
+        ? inc.split('_fromId')
+        : ['fromStore'];
+        
     const childValue = _get(child, inc) || _get(child, `${childKey}_default`)
-    const customReplacerValue = replacers && replacers[_get(child, `${childKey}_customValue`)]
+    const customReplacerValue = replacers && replacers[_get(child, `${childKey}_replaceValue`)]
 
     const customSelectorFromId = (selectors && selectors[childValue])
 

@@ -4,16 +4,19 @@ import { Provider } from 'react-redux';
 import Box from '../index'
 import configureStore from 'redux-mock-store';
 import { render } from '@testing-library/react';
+import { createSelector } from 'reselect';
 
 const mockStore = configureStore([]);
 
 const Text = ({ text, value }) => <h1>{text || value}</h1>
+const TextName = ({ name }) => <h1>{name}</h1>
 const Input = ({ onChange, value, name }) => <input name={name} value={value} onChange={evt => onChange(evt.target.value)} />
-const Container = ({ children }) => <div>{children}</div>
+const Container = ({ children }) => <div className='paper'>{children}</div>
 
 Box.setComponents({
   Input,
   Text,
+  TextName,
   Container
 })
 
@@ -115,7 +118,7 @@ describe('Test children', () => {
       </Provider>
     );
 
-    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div><h1>andrea</h1></div><div><h1>carla</h1></div></div></div>`)
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div class="paper"><h1>andrea</h1></div><div class="paper"><h1>carla</h1></div></div></div>`)
   })
 
 })
@@ -202,7 +205,102 @@ describe('Test value by id', () => {
       </Provider>
     );
 
-    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div><h1>andrea</h1></div><div><h1>carla</h1></div></div></div>`)
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div class="paper"><h1>andrea</h1></div><div class="paper"><h1>carla</h1></div></div></div>`)
+  })
+
+  it('Quando uso un selettore custom per l\'id, mi aspetto il render dell\'elemento correttamente', () => {
+
+    const children = [
+      {
+        container: 'Container',
+        type: 'Text',
+        id: 'getName'
+      }
+    ]
+
+    const getName = createSelector(
+      (state) => {
+        return state.app
+      },
+      (data) => {
+        return 'carla'
+      }
+    )
+
+    const wrapper = render(
+      <Provider store={store}>
+        <div>
+          <Box data={children} prefix="app" selectors={{ getName }} />
+        </div>
+      </Provider>
+    );
+
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div class="paper"><h1>carla</h1></div></div></div>`)
+  })
+
+  it('Quando uso un selettore custom per il valore l\'id, mi aspetto il render dell\'elemento correttamente', () => {
+
+    const children = [
+      {
+        container: 'Container',
+        type: 'Text',
+        id: 'getName',
+        replaceValue: 'uppercase'
+      }
+    ]
+
+    const getName = createSelector(
+      (state) => {
+        return state.app
+      },
+      (data) => {
+        return 'carla'
+      }
+    )
+
+    const uppercase = (state, val) => val.toUpperCase()
+
+    const wrapper = render(
+      <Provider store={store}>
+        <div>
+          <Box data={children} prefix="app" selectors={{ getName }} replacers={{ uppercase }} />
+        </div>
+      </Provider>
+    );
+
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div class="paper"><h1>CARLA</h1></div></div></div>`)
+  })
+
+  it('Quando uso un selettore custom per il valore da _id, mi aspetto il render dell\'elemento correttamente', () => {
+
+    const children = [
+      {
+        type: 'TextName',
+        name_id: 'getName',
+        name_replaceValue: 'uppercase'
+      }
+    ]
+
+    const getName = createSelector(
+      (state) => {
+        return state.app
+      },
+      (data) => {
+        return 'carla'
+      }
+    )
+
+    const uppercase = (state, val) => {
+      return val.toUpperCase()
+    }
+
+    const wrapper = render(
+      <Provider store={store}>
+          <Box data={children} prefix="app" selectors={{ getName }} replacers={{ uppercase }} />
+      </Provider>
+    );
+
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><h1>CARLA</h1></div>`)
   })
 
 })
@@ -300,7 +398,7 @@ describe('Test value by root id', () => {
       </Provider>
     );
 
-    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div><h1>andrea</h1></div><div><h1>carla</h1></div></div></div>`)
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div class="paper"><h1>andrea</h1></div><div class="paper"><h1>carla</h1></div></div></div>`)
   })
 
   it('Quando passo children validi nested con prefix nei nodi, mi aspetto il render dell\'elemento correttamente', () => {
@@ -337,7 +435,7 @@ describe('Test value by root id', () => {
       </Provider>
     );
 
-    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div><h1>andrea</h1></div><div><div><h1>carla</h1></div></div></div></div>`)
+    expect(wrapper.baseElement.innerHTML).toEqual(`<div><div><div class="paper"><h1>andrea</h1></div><div class="paper"><div class="paper"><h1>carla</h1></div></div></div></div>`)
   })
 
 })

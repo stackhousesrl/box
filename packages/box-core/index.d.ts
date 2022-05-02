@@ -1,6 +1,11 @@
 import { Component } from 'react'
 ​
 declare module '@stackhouseos/box-core' {
+
+    type CustomRules<PropName extends string> = `${PropName}_rules`
+    type CustomId<PropName extends string> = `${PropName}_id`
+    type CustomChildren<PropName extends string> = `${PropName}_children`
+
     export type BoxProps = {
         prefix: string;
         data: BoxChild | BoxChild[];
@@ -15,6 +20,12 @@ declare module '@stackhouseos/box-core' {
         id?: string;
         container?: BoxChild | string;
         ruleModeDisable?: boolean;
+    } & {
+        [K in CustomRules<string>]: {} | [];
+    } & {
+        [K in CustomId<string>]: string;
+    } & {
+        [K in CustomChildren<string>]: BoxChild[];
     }
 ​
     export default class Box extends Component<BoxProps> {
@@ -28,4 +39,5 @@ declare module '@stackhouseos/box-core' {
     export const BoxContext: BoxContext
     export const BoxContextProvider: BoxContext['Provider']
     export const BoxContextConsumer: BoxContext['Consumer']
+
 }

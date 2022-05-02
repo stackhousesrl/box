@@ -207,7 +207,7 @@ const model = [
   },
   {
     type: 'title',
-    title_fromId: 'selector_indirizzo',
+    title_id: 'selector_indirizzo',
   },
   {
     type: 'LargeComponent',

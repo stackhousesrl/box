@@ -83,51 +83,52 @@ Esempio
 
 ## Configs
 ### Box
-| Prop Name    | Type           | Is Required | Default Value | Description                                                                                                                                                                          |
-|--------------|----------------|-------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| data       | `array` | yes         |               | Schema del modello da visualizzare                                                                                                                                                   |
-| prefix       | `string`       | yes         |               | Path (dotStyle) è il nome del reducer in cui salvare e leggere i dati, es. tickets.detail                                                                                            |
-| destroyValue | `bool`         | optional    | false         | Regola di default per tutti i child del modello, se true svuota il dato se il componente viene distrutto, utile quando ci sono le regole, si evita di lasciare dati sporchi nel form |
-| selectors | `object`         | optional    | null         | Selettori validi da sostituire agli id o _fromId |
-| replacer | `object`         | optional    | null         | Replacer dei valori da sostituire a customValue |
+| Prop Name    | Type     | Is Required | Default Value | Description                                                                                                                                                                          |
+|--------------|----------|-------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| data         | `array`  | yes         |               | Schema del modello da visualizzare                                                                                                                                                   |
+| prefix       | `string` | yes         |               | Path (dotStyle) è il nome del reducer in cui salvare e leggere i dati, es. tickets.detail                                                                                            |
+| destroyValue | `bool`   | optional    | false         | Regola di default per tutti i child del modello, se true svuota il dato se il componente viene distrutto, utile quando ci sono le regole, si evita di lasciare dati sporchi nel form |
+| selectors    | `object` | optional    | null          | Selettori validi da sostituire agli id o _id                                                                                                                                         |
+| replacer     | `object` | optional    | null          | Replacer dei valori da sostituire a replaceValue                                                                                                                                     |
 
 
 ### Child schema
-| Prop Name       | Type                             | Is Required             | Default Value | Description                                                                                                                                                                                                                    |
-|-----------------|----------------------------------|-------------------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| type            | `string|component`               | optional                | `div`         | Componente da visualizzare                                                                                                                                                                                                     |
-| id              | `string|reselect`                         | optional                |               | redux path selector per leggere o salvare i dati                                                                                                                                                                               |
-| (*)_fromId      | `string|reselect`                | optional                |               | permette di leggere i dati da un selettore diverso da id, in quetso caso id viene utilizzato solo per salvare, utile quando si usano le select, che devono salvare su id ma prendere i dati da un'altro selettore, name_fromId |
-| children          | `array`                   | optional                |               | Recursive children                                                                                                                                                                                                               |
-| *_children          | `array`                   | optional                |               | Recursive children                                                                                                                                                                                                               |
-| onChange        | `string|func({value, dispatch})` | optional, `id` required |               | Viene scatenata ad ogni aggiornamento dell'id corrispondente, se viene usata una stringa deve corrispondere ad una azione di redux                                                                                             |
-| onLoad          | `string|func({value, dispatch})` | optional,`id` required  |               | Viene scatenata ad mount del compomente, se viene usata una stringa deve corrispondere ad una azione di redux                                                                                                                  |
-| prefix          | `string`                         | optional                |               | Path (dotStyle) aggiunge un prefisso a tutti gli id successivi                                                                                                                                                                 |
-| container       | `string|object`                  | optional                |               | Wrappa il componente dentro un'altro componente                                                                                                                                                                                |
-| rules           | `array|object`                   | optional                |               | vedi lib [json-rules]                                                                                                                                                                                                          |
-| ruleModeDisable | `bool`                           | optional                |               | Aggiunge la props disable nel componente, con false non si esegue il render del componente in base alle rules                                                                                                                  |
-| validate        | `array|object`                   | optional                |               | vedi lib [json-rules]                                                                                                                                                                                                          |
-| required        | `bool`                           | optional                |               | campo obbligatorio, solo se presente id                                                                                                                                                                                        |
-| pattern         | `string|regex`                   | optional                |               | es. "^[1-9][0-9]*$"                                                                                                                                                                                                            |
-| errorMessages   | `string|object`                  | optional                |               | es. Il campo è obbligatorio, oppure `{required:'Richiesto', min: 'Lunghezza minima 5'}`                                                                                                                                        |
-| destroyValue    | `bool`                           | optional                | false         | se true svuota il dato se il componente viene distrutto, utile quando ci sono le regole, si evita di lasciare dati sporchi nel form                                                                                            |
-| action          | `string|func`                    | optional                |               | Se stringa scatena un dispatch sul nome dell'azione, se funzione passa il dispatch per poter invocare azioni custom                                                                                                            |
+| Prop Name        | Type                             | Is Required             | Default Value | Description                                                                                                                                                                                                                |
+|------------------|----------------------------------|-------------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| type             | `string|component`               | optional                | `div`         | Componente da visualizzare                                                                                                                                                                                                 |
+| id               | `string|reselect`                | optional                |               | redux path selector per leggere o salvare i dati                                                                                                                                                                           |
+| (*?)_id           | `string|reselect`                | optional                |               | permette di leggere i dati da un selettore diverso da id, in quetso caso id viene utilizzato solo per salvare, utile quando si usano le select, che devono salvare su id ma prendere i dati da un'altro selettore, name_id |
+| (*?)_replaceValue | `string`                         | optional                |               | permette di modificare il value finale che viene passato al componente                                                                                                                                                     |
+| children         | `array`                          | optional                |               | Recursive children                                                                                                                                                                                                         |
+| (*?)_children       | `array`                          | optional                |               | Recursive children                                                                                                                                                                                                         |
+| onChange         | `string|func({value, dispatch})` | optional, `id` required |               | Viene scatenata ad ogni aggiornamento dell'id corrispondente, se viene usata una stringa deve corrispondere ad una azione di redux                                                                                         |
+| onLoad           | `string|func({value, dispatch})` | optional,`id` required  |               | Viene scatenata ad mount del compomente, se viene usata una stringa deve corrispondere ad una azione di redux                                                                                                              |
+| prefix           | `string`                         | optional                |               | Path (dotStyle) aggiunge un prefisso a tutti gli id successivi                                                                                                                                                             |
+| container        | `string|object`                  | optional                |               | Wrappa il componente dentro un'altro componente                                                                                                                                                                            |
+| rules            | `array|object`                   | optional                |               | vedi lib [json-rules]                                                                                                                                                                                                      |
+| ruleModeDisable  | `bool`                           | optional                |               | Aggiunge la props disable nel componente, con false non si esegue il render del componente in base alle rules                                                                                                              |
+| validate         | `array|object`                   | optional                |               | vedi lib [json-rules]                                                                                                                                                                                                      |
+| required         | `bool`                           | optional                |               | campo obbligatorio, solo se presente id                                                                                                                                                                                    |
+| pattern          | `string|regex`                   | optional                |               | es. "^[1-9][0-9]*$"                                                                                                                                                                                                        |
+| errorMessages    | `string|object`                  | optional                |               | es. Il campo è obbligatorio, oppure `{required:'Richiesto', min: 'Lunghezza minima 5'}`                                                                                                                                    |
+| destroyValue     | `bool`                           | optional                | false         | se true svuota il dato se il componente viene distrutto, utile quando ci sono le regole, si evita di lasciare dati sporchi nel form                                                                                        |
+| action           | `string|func`                    | optional                |               | Se stringa scatena un dispatch sul nome dell'azione, se funzione passa il dispatch per poter invocare azioni custom                                                                                                        |
 
 
 ### Child Component
 I tuoi componenti custom riceveranno in automatico le seguenti props, oltre al tutte le proprietà che userai nel tuo schema
 
-| Prop Name | Type     | Description                                                             |
-|-----------|----------|-------------------------------------------------------------------------|
-| onChange  | `func`   | Metodo per aggiornare i dati nell'id indicato                           |
-| value     | `any`    | Valore recuperato dal selettore                                         |
-| id        | `string` | Id child, obbligatorio se si vogliono leggere o salvare i dati su redux |
-| child     | `object` | Schema del child corrente                                               |
-| onAction  | `func`   | Da utilizzare per invocare il dispatch                                  |
-| disabled  | `bool`   | in base alla rules                                                      |
-| error     | `string` | in base a validation                                                    |
-| onBlur    | `func`   | Necessario per attivare la validazione degli input                               |
-| renderChildren    | `func`   | Utile per renderizzare nuovi componenti nello stesso contesto di validazione                               |
+| Prop Name      | Type     | Description                                                                  |
+|----------------|----------|------------------------------------------------------------------------------|
+| onChange       | `func`   | Metodo per aggiornare i dati nell'id indicato                                |
+| value          | `any`    | Valore recuperato dal selettore                                              |
+| id             | `string` | Id child, obbligatorio se si vogliono leggere o salvare i dati su redux      |
+| child          | `object` | Schema del child corrente                                                    |
+| onAction       | `func`   | Da utilizzare per invocare il dispatch                                       |
+| disabled       | `bool`   | in base alla rules                                                           |
+| error          | `string` | in base a validation                                                         |
+| onBlur         | `func`   | Necessario per attivare la validazione degli input                           |
+| renderChildren | `func`   | Utile per renderizzare nuovi componenti nello stesso contesto di validazione |
 
 
 ## Id
@@ -234,11 +235,11 @@ const model = [
 
 ### Rules and validation
 
-| Key       | Type   | Description                                                              |
-|-----------|--------|--------------------------------------------------------------------------|
-| ^hasError | `bool` | E' presente un errore nel form, vengono analizzati solo i child visibili |
-| ^isValid | `bool`  | Il form è valido, vengono analizzati solo i child visibili |
-| ^childId | `string`  | Valore della chiave |
+| Key       | Type     | Description                                                              |
+|-----------|----------|--------------------------------------------------------------------------|
+| ^hasError | `bool`   | E' presente un errore nel form, vengono analizzati solo i child visibili |
+| ^isValid  | `bool`   | Il form è valido, vengono analizzati solo i child visibili               |
+| ^childId  | `string` | Valore della chiave                                                      |
 
 Utile quando si vuole disabilitare il tasto salva se nel form sono presenti errori
 
