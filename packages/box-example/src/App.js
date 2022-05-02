@@ -14,6 +14,11 @@ const selector = createSelector(
 
 const model = [
   {
+    type: 'CustomError',
+    id: 'errori',
+    ruleModeDisable: true
+  },
+  {
     type: 'text',
     text: '^app.name'
   },

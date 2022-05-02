@@ -38,12 +38,12 @@ const transformPrefix = (key, prefix) => {
 export const chooseSelectorGlobalErrors = createSelector(
   getStateData,
   (state, extraData) => extraData,
-  (state, b, c, children) => children,
   (state, b, c, d, prefix) => prefix,
   (state, b, c, d, p, checkAll) => checkAll,
-  (data, extraData, children, prefix, checkAll) => {
-    if (Object.keys(children).length === 0) return { hasError: false }
-    const validation = generateValidationsObject(Object.entries(children).filter(([k, v]) => !!v).map(([key, val]) => Object.assign({}, val, {
+  (state, b, c, flatIds) => flatIds,
+  (data, extraData, prefix, checkAll, flatIds) => {
+    if (Object.keys(flatIds).length === 0) return { hasError: false }
+    const validation = generateValidationsObject(Object.entries(flatIds).filter(([k, v]) => !!v).map(([key, val]) => Object.assign({}, val, {
       id: transformPrefix(key, prefix)
     })));
     const [hasError, results] = checkRules(validation, Object.assign({}, data, extraData), false, { prefix, checkAll })
@@ -101,11 +101,13 @@ function mapKeysDeepLodash(obj, cb, isRecursive) {
   );
 };
 
-const generateValidationsObject = (children) => {
+const generateValidationsObject = (children, errorMessage = 'custom-error') => {
   return children.filter((e) => e.id && (e.pattern || e.required || e.validate))
     .map((inc) => ({
       and: [
-        inc.validate && mapKeysDeepLodash(inc.validate, (v, key) => key === "self" ? inc.id : key),
+        (inc.validate && _isFunction(inc.validate))
+          ? ({ self: { func: inc.validate, name: errorMessage } })
+          : (inc.validate && mapKeysDeepLodash(inc.validate, (v, key) => key === "self" ? inc.id : key)),
         inc.pattern && {
           [inc.id]: { re: inc.pattern },
         },

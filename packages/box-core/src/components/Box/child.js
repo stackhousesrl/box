@@ -20,7 +20,7 @@ class BoxChild extends PureComponent {
   constructor() {
     super();
     this.loaded = false;
-    this.state = { blur: false }
+    this.state = { blur: false, customError: undefined }
   }
 
   componentDidMount() {
@@ -124,18 +124,27 @@ class BoxChild extends PureComponent {
     }
   }
 
-  onBlur = () => this.setState({ blur: true })
-  setError = () => {
+  onBlur = (cb) => this.setState({ blur: true }, cb)
 
+  setError = (hasError = false, message) => {
+    const { setFlatId } = this.props
+    this.setState({
+      customError: hasError ? message : undefined
+    })
+    this.onBlur(() => {
+      setFlatId({
+        validate: () => !hasError,
+      })
+    })
   }
 
   get getError() {
-    const { blur } = this.state
+    const { blur, customError } = this.state
     const { error, contextProps } = this.props
     const { showErrors } = contextProps
     if (!blur && !showErrors) return null
-    if (!error) return null
-    const results = error.split('|#|')
+    if (!error && !customError) return null
+    const results = customError ? [customError] : error.split('|#|')
     return results
   }
 
@@ -208,7 +217,8 @@ const makeMapStateToProps = (state, props) => {
     contextProps,
     disableErrors,
     selectors,
-    replacers
+    replacers,
+    validateObject
   } = props;
 
   const {
@@ -246,7 +256,7 @@ const makeMapStateToProps = (state, props) => {
       : inc.indexOf('_fromId') > 0
         ? inc.split('_fromId')
         : ['fromStore'];
-        
+
     const childValue = _get(child, inc) || _get(child, `${childKey}_default`)
     const customReplacerValue = replacers && replacers[_get(child, `${childKey}_replaceValue`)]
 
@@ -274,16 +284,16 @@ const makeMapStateToProps = (state, props) => {
 
 
   const finalProps = {
-    pattern: child.pattern,
-    required: child.required,
-    validate: child.validate,
+    pattern: validateObject?.pattern,
+    required: validateObject?.required,
+    validate: validateObject?.validate,
     ...child_with_rules,
     ...child_with_func,
     ...child_with_selector,
     value
   };
 
-  const { required, pattern, validate } = finalProps
+  const { required, pattern, validate, errorMessage } = finalProps
   const error = !disableErrors && childId && (pattern || required || validate) && chooseSelectorErrors(state, contextProps, childId, { pattern, required, validate }, prefix)
 
   return {

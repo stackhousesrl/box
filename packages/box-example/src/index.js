@@ -1,4 +1,4 @@
-import React, { useDeferredValue } from 'react';
+import React, { useDeferredValue, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl'
@@ -7,10 +7,16 @@ import Box from '@stackhouseos/box-core';
 
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 import configureStore from './store';
 
 const { store } = configureStore({});
+
+const CustomError = ({ value = '-', setError, error }) => {
+  useEffect(() => {
+    setError(true, 'err1')
+  }, [setError])
+  return <button disabled={!!error}>{error + 'error'}</button>
+}
 
 Box.registerComponents({
   input: ({ onChange, value = '', error, onBlur }) => {
@@ -56,7 +62,8 @@ Box.registerComponents({
   LargeComponent: ({ value = '' }) => {
     const deferredValue = useDeferredValue(value);
     return Array(1000).fill(1).map((r, i) => <div key={i}>{i + deferredValue}</div>)
-  }
+  },
+  CustomError
 })
 
 createRoot(document.getElementById('root')).render(

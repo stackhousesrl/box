@@ -1,20 +1,28 @@
 
 import 'jsdom-global/register'
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import Box from '../index'
 import { render, fireEvent } from '@testing-library/react';
 import { combineReducers, createStore } from 'redux';
 import { userSlice } from './test-utils';
 
+
 const Text = ({ text, value }) => <h1>{text || value}</h1>
 const Input = ({ onChange, value = '', name, childId }) => <input data-testid={childId} name={name} value={value} onChange={evt => onChange(evt.target.value)} />
 const Container = ({ children }) => <div>{children}</div>
+const CustomError = ({ setError, childId }) => {
+  useEffect(() => {
+    setError(true)
+  }, [setError])
+  return <h1 data-testid={childId}>{'error'}</h1>
+}
 
 Box.setComponents({
   Input,
   Text,
-  Container
+  Container,
+  CustomError
 })
 
 describe('Test children update onChange', () => {
@@ -84,7 +92,7 @@ describe('Test children update onChange', () => {
 
     const inputEl = await wrapper.getByTestId('app.a.b.c.surname')
     fireEvent.change(inputEl, { target: { value: 'Hello' } })
-    
+
     expect(dispatchSpy.mock.lastCall[0].type).toEqual('@box/app/update');
 
     expect(store.getState()).toEqual({
@@ -104,7 +112,7 @@ describe('Test children update onChange', () => {
 
   })
 
-  it('Quando passo un valore ad un input obbligatorio, mi aspetto che sia validato (^isValid)', async () => {
+  it('Quando passo un valore ad un input obbligatorio, mi aspetto che sia validato (^isValid) 1', async () => {
 
     const children = [
       {
@@ -142,14 +150,12 @@ describe('Test children update onChange', () => {
 
   })
 
-  it('Quando non passo un valore ad un input obbligatorio, mi aspetto che non sia valido (^isValid)', () => {
+  it('Quando non passo un valore ad un input da validare con un validatore custom, mi aspetto che non sia valido (^isValid)', async () => {
 
     const children = [
       {
-        type: 'Input',
-        id: 'surname',
-        name: 'surname',
-        required: true
+        type: 'CustomError',
+        id: 'surname'
       },
       {
         type: 'Text',
@@ -175,7 +181,57 @@ describe('Test children update onChange', () => {
       </Provider>
     );
 
-    expect(wrapper.baseElement.innerHTML).toEqual('<div><div><input data-testid=\"app.surname\" name=\"surname\" value=\"\"><h1>KO!</h1></div></div>')
+
+    const inputEl = wrapper.getByTestId('app.surname')
+
+    expect(wrapper.baseElement.innerHTML).toEqual('<div><div><h1 data-testid="app.surname">error</h1><h1>KO!</h1></div></div>')
+
+  })
+
+  it('Quando non passo un valore ad un input da validare, mi aspetto che non sia valido (^isValid)', async () => {
+
+    const children = [
+      {
+        type: 'Input',
+        id: 'surname',
+        name: 'surname',
+        validate: {
+          self: { eq: 'and' }
+        }
+      },
+      {
+        type: 'Text',
+        text: 'OKK',
+        rules: {
+          '^isValid': { eq: true }
+        }
+      },
+      {
+        type: 'Text',
+        text: 'KO!',
+        rules: {
+          '^isValid': { eq: false }
+        }
+      }
+    ]
+
+    const dispatchSpy = jest.spyOn(store, 'dispatch')
+
+    const wrapper = render(
+      <Provider store={store}>
+        <div>
+          <Box data={children} prefix="app" />
+        </div>
+      </Provider>
+    );
+
+
+    const inputEl = wrapper.getByTestId('app.surname')
+    fireEvent.change(inputEl, { target: { value: 'a' } })
+
+    expect(dispatchSpy.mock.lastCall[0].type).toEqual('@box/app/update');
+
+    expect(wrapper.baseElement.innerHTML).toEqual('<div><div><input data-testid="app.surname" name="surname" value="a"><h1>KO!</h1></div></div>')
 
   })
 

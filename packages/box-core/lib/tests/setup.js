@@ -1,1 +1,1 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault");var _enzyme=_interopRequireDefault(require("enzyme"));console.warn=function(){};
+"use strict";global.IS_REACT_ACT_ENVIRONMENT=true;console.warn=function(){};
