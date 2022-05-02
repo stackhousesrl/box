@@ -2,32 +2,38 @@ import { Component } from 'react'
 ​
 declare module '@stackhouseos/box-core' {
 
-    type CustomRules<PropName extends string> = `${PropName}_rules`
-    type CustomId<PropName extends string> = `${PropName}_id`
-    type CustomChildren<PropName extends string> = `${PropName}_children`
+    type CustomRules<PropName extends string = string> = `${PropName}_rules`
+    type CustomId<PropName extends string = string> = `${PropName}_id`
+    type CustomChildren<PropName extends string = string> = `${PropName}_children`
 
     export type BoxProps = {
         prefix: string;
         data: BoxChild | BoxChild[];
         destroyValue?: boolean
     }
+
+    type Rule = Record<string, any>
     
-    export type BoxChild = Partial<BoxProps> & {
+    export type BoxChild =  {
         type:string;
-        rules?: {} | [];
+        prefix?: string;
+        rules?: Rule | Rule[];
         children?: BoxChild[],
-        validate?: {};
+        validate?: Rule;
         id?: string;
         container?: BoxChild | string;
         ruleModeDisable?: boolean;
+        destroyValue?: boolean;
     } & {
-        [K in CustomRules<string>]: {} | [];
+        [K in CustomRules]: BoxChild['rules'];
     } & {
-        [K in CustomId<string>]: string;
+        [K in CustomId]: string;
     } & {
-        [K in CustomChildren<string>]: BoxChild[];
+        [K in CustomChildren]: BoxChild[];
+    } & {
+        [K:string]: any;
     }
-​
+
     export default class Box extends Component<BoxProps> {
         static registerComponents ( components: {}): Component
     }
