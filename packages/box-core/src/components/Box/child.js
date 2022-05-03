@@ -124,17 +124,16 @@ class BoxChild extends PureComponent {
     }
   }
 
-  onBlur = (cb) => this.setState({ blur: true }, cb)
+  onBlur = () => this.setState({ blur: true })
 
-  setError = (hasError = false, message) => {
+  setError = (hasError = false, message = 'custom-error') => {
     const { setFlatId } = this.props
     this.setState({
       customError: hasError ? message : undefined
     })
-    this.onBlur(() => {
-      setFlatId({
-        validate: () => !hasError,
-      })
+    this.onBlur()
+    setFlatId({
+      validate: () => !hasError,
     })
   }
 
