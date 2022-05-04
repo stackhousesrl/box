@@ -22,7 +22,7 @@ const makeMapStateToProps = (state, props) => {
   const { rules } = child;
   return {
     disabled: !disableRules && rules && selectorRulesDisabled(state, contextProps, rules, flatIds, prefix, false, childId),
-    validateObject: flatIds[childId] || child,
+    validateObject: flatIds[childId] || child, // al primo render va passato child
     flatIds: undefined // evita i rerender totali
   };
 };

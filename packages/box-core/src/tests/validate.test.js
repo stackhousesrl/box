@@ -18,11 +18,19 @@ const CustomError = ({ setError, childId, error }) => {
   return <h1 data-testid={childId}>{error}</h1>
 }
 
+const CustomErrorOk = ({ setError, childId, error }) => {
+  useEffect(() => {
+    setError(false)
+  }, [setError])
+  return <h1 data-testid={childId}>{error}</h1>
+}
+
 Box.setComponents({
   Input,
   Text,
   Container,
-  CustomError
+  CustomError,
+  CustomErrorOk
 })
 
 describe('Test children validate', () => {
@@ -74,7 +82,7 @@ describe('Test children validate', () => {
 
   })
 
-  it('Quando non passo un valore ad un input da validare con un validatore custom, mi aspetto che non sia valido (^isValid)', async () => {
+  it('Quando non passo un valore ad un input da validare con un validatore custom, mi aspetto che non sia valido (^isValid) 2', async () => {
 
     const children = [
       {
@@ -112,7 +120,45 @@ describe('Test children validate', () => {
 
   })
 
-  it('Quando non passo un valore ad un input da validare, mi aspetto che non sia valido (^isValid)', async () => {
+  it('Quando non passo un valore ad un input da validare con un validatore custom, mi aspetto che sia valido (^isValid)', async () => {
+
+    const children = [
+      {
+        type: 'CustomErrorOk',
+        id: 'surname'
+      },
+      {
+        type: 'Text',
+        text: 'OKK!',
+        rules: {
+          '^isValid': { eq: true }
+        }
+      },
+      {
+        type: 'Text',
+        text: 'KO!',
+        rules: {
+          '^isValid': { eq: false }
+        }
+      }
+    ]
+
+    const wrapper = render(
+      <Provider store={store}>
+        <div>
+          <Box data={children} prefix="app" />
+        </div>
+      </Provider>
+    );
+
+
+    const inputEl = wrapper.getByTestId('app.surname')
+
+    expect(wrapper.baseElement.innerHTML).toEqual('<div><div><h1 data-testid="app.surname"></h1><h1>OKK!</h1></div></div>')
+
+  })
+
+  it('Quando non passo un valore ad un input da validare, mi aspetto che non sia valido (^isValid) 3', async () => {
 
     const children = [
       {
@@ -149,12 +195,10 @@ describe('Test children validate', () => {
       </Provider>
     );
 
-
     const inputEl = wrapper.getByTestId('app.surname')
     fireEvent.change(inputEl, { target: { value: 'a' } })
 
     expect(dispatchSpy.mock.lastCall[0].type).toEqual('@box/app/update');
-
     expect(wrapper.baseElement.innerHTML).toEqual('<div><div><input data-testid="app.surname" name="surname" value="a"><h1>KO!</h1></div></div>')
 
   })

@@ -292,7 +292,7 @@ const makeMapStateToProps = (state, props) => {
     value
   };
 
-  const { required, pattern, validate, errorMessage } = finalProps
+  const { required, pattern, validate } = finalProps
   const error = !disableErrors && childId && (pattern || required || validate) && chooseSelectorErrors(state, contextProps, childId, { pattern, required, validate }, prefix)
 
   return {
