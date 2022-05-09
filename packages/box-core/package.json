@@ -1,6 +1,6 @@
 {
   "name": "@stackhouseos/box-core",
-  "version": "5.0.6-beta",
+  "version": "5.0.7-beta",
   "description": "Json generator layout",
   "repository": {
     "type": "git",
@@ -25,7 +25,6 @@
     "hoist-non-react-statics": "^3.3.1",
     "immer": "^8.0.0",
     "is-buffer": "^2.0.4",
-    "lodash": "^4.17.15",
     "moize": "^5.4.7",
     "reselect": "^4.0.0"
   },
@@ -75,6 +74,7 @@
     "sinon": "^13.0.1"
   },
   "peerDependencies": {
+    "lodash": "^4.17.15",
     "prop-types": ">=15",
     "react": ">=16",
     "react-redux": ">=7",
