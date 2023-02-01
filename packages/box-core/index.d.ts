@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { Component, ComponentType } from 'react'
 ​
 declare module '@stackhouseos/box-core' {
     export type BoxProps = {
@@ -8,7 +8,7 @@ declare module '@stackhouseos/box-core' {
     }
     
     export type BoxField = Partial<BoxProps> & {
-        type:string;
+        type:string | ComponentType;
         rules?: {} | [];
         validate?: {};
         id?: string;
